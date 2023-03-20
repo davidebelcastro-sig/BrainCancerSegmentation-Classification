@@ -4,7 +4,7 @@ import numpy as np
 
 
 # Caricare l'immagine di input
-img = cv2.imread("Y15.jpg")
+img = cv2.imread("Y14.jpg")
 
 # converte l'immagine in scala di grigi
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -49,14 +49,14 @@ closed = cv2.morphologyEx(cl_img, cv2.MORPH_CLOSE, kernel)
 # applica una apertura per eliminare le piccole regioni
 #opening = cv2.morphologyEx(closed, cv2.MORPH_OPEN, kernel)
 
-window_size = 60  # dimensione della finestra intorno al pixel di interesse
-sigma_color = 90  # deviazione standard di intensità
-sigma_space = 90  # deviazione standard spaziale
-filtered = cv2.bilateralFilter(closed, window_size, sigma_color, sigma_space)
+#window_size = 80  # dimensione della finestra intorno al pixel di interesse
+#sigma_color = 80  # deviazione standard di intensità
+#sigma_space = 80  # deviazione standard spaziale
+#filtered = cv2.bilateralFilter(closed, window_size, sigma_color, sigma_space)
 
 
 # Applica la soglia per binarizzare l'immagine
-ret, thresh = cv2.threshold(filtered, 150, 255, cv2.THRESH_BINARY)
+ret, thresh = cv2.threshold(closed, 150, 255, cv2.THRESH_BINARY)
 
 # Trova i contorni nell'immagine binarizzata
 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -73,6 +73,6 @@ for cnt in contours:
 
 # Visualizzare l'immagine di output
 cv2.imshow('Input', img)
-cv2.imshow('Output', filtered)
+cv2.imshow('Output', closed)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
