@@ -2,14 +2,18 @@ import flet as ft
 from flet import *
 
 import segmentation as seg
+import filters as fil
+import view as vi 
 
 def main(page: ft.Page):
     #* Window settings
     page.title = "Brain Cancer Detection"
     page.window_width = 900
-    page.window_height = 820
+    page.window_height = 840
     page.window_title_bar_hidden = True
     page.window_title_bar_buttons_hidden = True
+    # block resizing
+    page.window_resizable = False
     page.padding = 25
     #NOTE: all the following code is for the Navigation Bar implementation
     def changetab(e):
@@ -25,22 +29,22 @@ def main(page: ft.Page):
         destinations=[
             ft.NavigationDestination(icon=ft.icons.ADD_A_PHOTO, label="Segmentation"),
             ft.NavigationDestination(icon=ft.icons.ZOOM_IN, label="3D View"),
-            ft.NavigationDestination(icon=ft.icons.SETTINGS,label="Settings"),
+            ft.NavigationDestination(icon=ft.icons.SETTINGS,label="Filters"),
         ]
     )
 
     tab_1 = seg.Segmentation()
-    tab_2 = Text("Tab 2",size=30,visible=False)
-    tab_3 = Text("Tab 3",size=30,visible=False)
+    tab_2 = vi.View()
+    tab_3 = fil.Filters()
 
     page.add(
         Container(
         content=Column([
             tab_1,
             tab_2,
-            tab_3
+            tab_3,
         ])
-    )
+    ),
     )
 
 #NOTE: this is the main entry point for the application
