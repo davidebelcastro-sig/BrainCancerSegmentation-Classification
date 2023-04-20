@@ -1,0 +1,2 @@
+Dir,NumeroCorrette,NumeroErrate,PercCorrette,PercErrate,Totale
+../dataset_nii/dataset/brainTumorDataPublic_1-766,158,38,80.61224489795919%,19.387755102040817%,196
