@@ -1,20 +1,21 @@
 import flet as ft
 from flet import *
 
+#NOTE: import the pages implemented in the gui folder
 import segmentation as seg
 import filters as fil
 import view as vi 
 
 def main(page: ft.Page):
-    #* Window settings
+    #NOTE: this is the main page configuration
     page.title = "Brain Cancer Detection"
     page.window_width = 900
     page.window_height = 840
     page.window_title_bar_hidden = True
     page.window_title_bar_buttons_hidden = True
-    # block resizing
     page.window_resizable = False
     page.padding = 25
+
     #NOTE: all the following code is for the Navigation Bar implementation
     def changetab(e):
         my_index = e.control.selected_index

@@ -162,7 +162,7 @@ class Segmentation(UserControl):
     
     def step_three(self):
         return Container(
-            height= 350,
+            height= 380,
             width=420,
             border_radius=6,
             border = border.all(0.8, "white24"),
@@ -173,7 +173,7 @@ class Segmentation(UserControl):
                     Row(
                         spacing=0,
                         controls=[
-                            Image("/Users/lucian/Documents/GitHub/BrainCancerDetection/gui/data/1.jpg"),  
+                            #Image("/Users/lucian/Documents/GitHub/BrainCancerDetection/gui/data/1.jpg"),  
                         ]
                     ),
                 ]
@@ -189,7 +189,7 @@ class Segmentation(UserControl):
             horizontal_alignment=CrossAxisAlignment.START,
             controls=[
                 self.segmentation_title(),
-                Divider(height=20, color="transparent"),
+                #Divider(height=20, color="transparent"),
                 #Text("", size=14, weight="bold"),
                 self.step_one(),
                 
