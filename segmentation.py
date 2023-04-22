@@ -1,7 +1,9 @@
+import time
 import flet 
 from flet import *
-import os
-
+import run
+import cv2
+from datetime import datetime
 controls_dict = {}
 
 class Button(UserControl):
@@ -34,29 +36,38 @@ class Segmentation(UserControl):
         self.btn_callback_folder = FilePicker(on_result=None)
         self.session = []
         super().__init__()
-
+    def convert(self, array):
+        dir = '/Users/lucian/Documents/GitHub/BrainCancerDetection/tmp'
+        now = datetime.now()
+        file_name = now.strftime("%H:%M:%S")
+        t = f"{file_name}.png"
+        path = dir + "/" + t
+        cv2.imwrite(path, array)
+        return path
+    def start_segmentation(self):
+            
+        file_to_segment = self.session[0]
+        final = run.main(file_to_segment)
+        path = self.convert(final) 
+        view = controls_dict['After']
+        view.content = Column()
+        print(file_to_segment)
+        print(path)
+        self.update()
+        view.content.controls.append(self.append_image(path))
+        view.content.update()
+        
     def return_file_list(self, file_icon, file_name, file_path):
         return Column(
             spacing=1,
             controls=[
-                Row(
-                    controls=[
-                        Icon(file_icon, size=12),
-                        Text(file_name, size=13),
-                    ]
-                ),
-                Row(
-                    controls=[
-                        Text(file_path, size=9,no_wrap=False, color="white54"),
-                    ]
-                )
+                Row(controls=[Icon(file_icon, size=12),Text(file_name, size=13),]),
+                Row(controls=[Text(file_path, size=9,no_wrap=False, color="white54"),])
             ]
         )
     def append_image(self, file_path):
         return Column(
-            controls=[
-                Image(file_path, height=375, width=430, fit="contain"),
-            ]
+            controls=[Image(file_path, height=375, width=430, fit="contain"),]
         )
     
     def segmentation_files(self, e: FilePickerResultEvent):
@@ -68,7 +79,9 @@ class Segmentation(UserControl):
                 expand=True,
             )
             view = controls_dict['Before']
+            t = controls_dict['After']
             view.content = Column()
+            t.content = Column()
             self.update()
             for file in e.files:
                 self.session.append(file.path)
@@ -77,9 +90,7 @@ class Segmentation(UserControl):
                         icons.FILE_COPY_ROUNDED, file.name, file.path
                     )
                 )
-                view.content.controls.append(
-                    self.append_image(file.path)
-                )
+                view.content.controls.append(self.append_image(file.path))
                 control.content.update()
                 view.content.update()
         else:
@@ -120,7 +131,7 @@ class Segmentation(UserControl):
                     self.btn_callback_files,
                     self.btn_callback_folder,
                     Button("Start Segmentation", 260,
-                           lambda __: self.btn_callback_folder.get_directory_path(),
+                           lambda __: self.start_segmentation(),
                            ),
                     Button("Save Output", 260,
                            lambda __: self.btn_callback_folder.get_directory_path(),
