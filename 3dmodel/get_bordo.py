@@ -31,4 +31,4 @@ def fun(path):
     return mask
 
 if __name__ == '__main__':
-    fun('40.png')
+    fun('/Users/lucian/Documents/GitHub/BrainCancerDetection/3dmodel/40.png')
