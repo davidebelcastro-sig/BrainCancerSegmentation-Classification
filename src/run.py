@@ -101,8 +101,8 @@ def load_image_jpg():
 
 
 #path = load_image_jpg()
-path = load_image_nii()
-#path = "brain.png"
+#path = load_image_nii()
+path = "/Users/lucian/Documents/GitHub/BrainCancerDetection/gui/data/1.jpg"
 
 
 tupla_return = skull_stripping.get_brain(path)

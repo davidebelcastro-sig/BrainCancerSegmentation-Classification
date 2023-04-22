@@ -40,7 +40,8 @@ def main(page: ft.Page):
 
     page.add(
         Container(
-        content=Column([
+        content=Column(
+            [
             tab_1,
             tab_2,
             tab_3,

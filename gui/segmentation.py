@@ -30,9 +30,8 @@ class Button(UserControl):
 
 class Segmentation(UserControl):
     def __init__(self):
-
         self.btn_callback_files = FilePicker(on_result=self.segmentation_files)
-        self.btn_callback_folder = FilePicker(on_result=self.segmentation_folder)
+        self.btn_callback_folder = FilePicker(on_result=None)
         self.session = []
         super().__init__()
 
@@ -53,36 +52,13 @@ class Segmentation(UserControl):
                 )
             ]
         )
-
-    def segmentation_folder(self, e: FilePickerResultEvent):
-        self.session=[]
-        if e.path:
-            control = controls_dict['files']
-            control.content = Column(scroll='auto', expand=True)
-            self.session.append(e.path)
-            self.update()
-            control.content.controls.append(
-                Row(
-                    controls=[
-                        Icon(icons.FOLDER_COPY_ROUNDED, size=12),
-                        Text(e.path, size=13),
-                    ]
-                ),
-            )
-            control.content.controls.append(
-                Container(
-                    padding=padding.only(left=18),
-                    content=Column(expand=True),
-                )
-            )
-            for file in os.listdir(e.path):
-                file_path = os.path.join(e.path + "/" + file)
-                control.content.controls[1].content.controls.append(
-                    self.return_file_list(icons.FILE_COPY_ROUNDED, file, file_path)
-                )
-            control.content.update()
-        pass
-
+    def append_image(self, file_path):
+        return Column(
+            controls=[
+                Image(file_path, height=375, width=430, fit="contain"),
+            ]
+        )
+    
     def segmentation_files(self, e: FilePickerResultEvent):
         self.session=[]
         if e.files:
@@ -91,6 +67,8 @@ class Segmentation(UserControl):
                 scroll='auto',
                 expand=True,
             )
+            view = controls_dict['Before']
+            view.content = Column()
             self.update()
             for file in e.files:
                 self.session.append(file.path)
@@ -99,7 +77,11 @@ class Segmentation(UserControl):
                         icons.FILE_COPY_ROUNDED, file.name, file.path
                     )
                 )
+                view.content.controls.append(
+                    self.append_image(file.path)
+                )
                 control.content.update()
+                view.content.update()
         else:
             pass
 
@@ -160,27 +142,18 @@ class Segmentation(UserControl):
 
         return self.container
     
-    def step_three(self):
-        return Container(
+    def step_three(self, title):
+        self.title = title
+        self.container = Container(
             height= 380,
             width=420,
             border_radius=6,
             border = border.all(0.8, "white24"),
-            content=Row(
-                alignment=MainAxisAlignment.CENTER,
-                spacing=5,
-                controls=[
-                    Row(
-                        spacing=0,
-                        controls=[
-                            #Image("/Users/lucian/Documents/GitHub/BrainCancerDetection/gui/data/1.jpg"),  
-                        ]
-                    ),
-                ]
-            ),
-
         )
-        pass
+        controls_dict[self.title] = self.container
+    
+        return self.container
+
     #NOTE: Main entry point for the Segmentation page
     def build(self):
         return Column(
@@ -200,11 +173,9 @@ class Segmentation(UserControl):
                 Text("Before and After", size=14, weight="bold"),
                 Row(
                    controls=[
-                    self.step_three(),
-                    self.step_three(),
+                    self.step_three("Before"),
+                    self.step_three("After"),
                    ]
                 ),
-                
-
             ]
         )
