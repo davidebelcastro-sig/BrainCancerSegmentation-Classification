@@ -8,12 +8,9 @@ import view as vi
 
 def main(page: ft.Page):
     #NOTE: this is the main page configuration
-    page.title = "Brain Cancer Detection"
+    page.title = "Brain Cancer Segmentation"
     page.window_width = 900
     page.window_height = 850
-    page.window_title_bar_hidden = True
-    page.window_title_bar_buttons_hidden = True
-    page.window_resizable = False
     page.padding = 25
     page.bgcolor = colors.BLACK
     #NOTE: all the following code is for the Navigation Bar implementation
