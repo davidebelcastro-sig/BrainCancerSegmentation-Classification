@@ -84,9 +84,9 @@ def save_image(immagine_iniziale,nome):
     return 0
     
 if __name__=='__main__':
-    contorno = get_contourn_external_withBord(cv2.imread('brain.png'))
-    modify_light_contorno(cv2.imread('brain.png'),contorno,50,1)
-    r = get_only_contorno(cv2.imread('brain.png'),contorno)
+    contorno = get_contourn_external_withBord(cv2.imread('/Users/lucian/Documents/GitHub/BrainCancerDetection/image_filter2D/brain.png'))
+    #modify_light_contorno(cv2.imread('/Users/lucian/Documents/GitHub/BrainCancerDetection/image_filter2D/brain.png'),contorno,50,1)
+    r = get_only_contorno(cv2.imread('/Users/lucian/Documents/GitHub/BrainCancerDetection/image_filter2D/brain.png'),contorno)
     cv2.imshow('r',r)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

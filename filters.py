@@ -1,41 +1,7 @@
 import flet 
 from flet import *
 from segmentation import Button
-
-class AppForm(UserControl):
-    def __init__(self, name: str, end_name: str):
-        self.name = name
-        self.end_name = end_name
-        super().__init__()
-
-    def build(self):
-        return Container(
-            height=45,
-            bgcolor="#ebebeb",
-            border_radius=6,
-            padding=8,
-            alignment=alignment.center_left,
-            content=Column(
-                spacing=1,
-                controls=[
-                    TextField(
-                        border_color="transparent",
-                        height=19,
-                        text_size=13,
-                        content_padding=5,
-                        cursor_color="black",
-                        cursor_width=1,
-                        cursor_height=18,
-                        color="black",
-                        suffix_text=self.end_name,
-                        suffix_style=TextStyle(color="black"),
-                        prefix_text=self.name,
-                        prefix_style=TextStyle(color="black"),
-                    ),
-                ],
-            ),
-        )
-
+data = []
 class AppCounter(UserControl):
     def __init__(self):
         super().__init__()
@@ -129,6 +95,7 @@ class AppSizeMenu(UserControl):
                 controls=[
                     self.app_size_main_builder("Yes"),
                     self.app_size_main_builder("No"),
+                    self.app_size_main_builder("Pass"),
                 ],
             )
         )
@@ -160,6 +127,9 @@ class AppButton(UserControl):
 
 class Filters(UserControl):
     def __init__(self):
+        self.btn_callback_files = FilePicker(on_result=self.segmentation_files)
+        self.btn_callback_folder = FilePicker(on_result=None)
+        self.session = []
         super().__init__()
     
     def filters_title(self):
@@ -170,8 +140,7 @@ class Filters(UserControl):
                 controls=[
                     Text("Segmentation Filters", size=18, weight="bold"),
                     IconButton(
-                        content=Text(
-                            "x",
+                        content=Text("x",
                             weight="bold",
                             size=18,
                         ),
@@ -181,6 +150,10 @@ class Filters(UserControl):
             )
         )
     
+    def segmentation_files(self, e: FilePickerResultEvent):
+        
+        pass
+
     def step_one(self):
         return Container(
             height=80,
@@ -192,12 +165,12 @@ class Filters(UserControl):
                 vertical_alignment=CrossAxisAlignment.CENTER,
                 controls=[
                     Button("Upload Image", 260, 
-                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False),
+                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False),"black"
                            ),
-                    #self.btn_callback_files,
+                    self.btn_callback_files,
                     #self.btn_callback_folder,
                     Button("Save New Image", 260,
-                           lambda __: self.btn_callback_folder.get_directory_path(),
+                           lambda __: self.btn_callback_folder.get_directory_path(),"black"
                            ),
                 ]
             )
@@ -217,10 +190,34 @@ class Filters(UserControl):
         return self.container
     
     def generate_image(self, e):
-        print("generate image")
+        stuff = data[-1]
+        data_list = []
+        c = []
+        for d in stuff:
+            if not isinstance(d, Text):
+                if not isinstance(d, Divider):
+                    if not isinstance(d, AppButton):
+                        data_list.append(d.controls[0].content)
+        
+        for p in data_list:
+            for item in p.controls[:]:
+                if isinstance(item, Text):
+                    c.append(item.value)
+                if isinstance(item, Column):
+                    for checks in item.controls[:]:
+                        if isinstance(checks, Container):
+                            if checks.content.value == True:
+                                ans = str(item.controls[0].value)
+                                c.append(ans)
+
+        #TODO => I have all the data inside c
+        # i need to send it to the backend and get the new image
+
+        print(c)
+
 
     def card(self):
-        return Container(
+        self.container = Container(
             height=420,
             border=border.all(0.8, "white24"),
             border_radius=6,
@@ -234,16 +231,13 @@ class Filters(UserControl):
                         #height=400,
                         content=Column(
                           controls=[
-
-                            Text("Output destination", size=12, weight="bold"),
-                            AppForm('./Downloads/', None),
                             Text("Increment/decrement light", size=12, weight="bold"),
                             AppCounter(),
                             Text("Image without segmented edge ?", size=12, weight="bold"),
                             AppSizeMenu(),
                             Text("Image with only the tumor ?", size=12, weight="bold"),
                             AppSizeMenu(),
-                            Divider(height=2, color="transparent"),
+                            Divider(height=15, color="transparent"),
                             AppButton(lambda e: self.generate_image(e)),
                           ]  
                         ),
@@ -255,19 +249,14 @@ class Filters(UserControl):
                     Container(
                         width=400,
                         height=400,
-                        content=Column(
-                            scroll="auto",
-                            expand=True,
-                            alignment=MainAxisAlignment.CENTER,
-                            controls=[
-                                #TODO where the image will be displayed 
-                                #Image("/Users/lucian/Documents/GitHub/BrainCancerDetection/gui/data/1.jpg"),
-                            ],
-                        )
+                        content=Column()
                     ),                
                 ]
             )
         )
+        instance = self.container.content.controls[0].content.controls[:]
+        data.append(instance)
+        return self.container
     
     def build(self):
         return Column(
@@ -278,9 +267,9 @@ class Filters(UserControl):
                 self.filters_title(),
                 #Divider(height=20, color="transparent"),
                 self.step_one(),
-                Text("Input file", size=14, weight="bold"),
+                Text("Input file", size=16, weight="bold"),
                 self.step_two(),
-                Text("Select Options", size=14, weight="bold"),
+                Text("Select Options", size=16, weight="bold"),
                 self.card(),
             ]
         )

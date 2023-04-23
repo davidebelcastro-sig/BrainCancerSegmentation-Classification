@@ -1,3 +1,4 @@
+import shutil
 import time
 import flet 
 from flet import *
@@ -5,12 +6,13 @@ import run
 import cv2
 from datetime import datetime
 controls_dict = {}
-
+save = []
 class Button(UserControl):
-    def __init__(self, btn_name, btn_width, btn_function):
+    def __init__(self, btn_name, btn_width, btn_function, btn_color):
         self.btn_name = btn_name
         self.btn_width = btn_width
         self.btn_function = btn_function
+        self.btn_color = btn_color
         super().__init__()
     
     def build(self):
@@ -19,12 +21,13 @@ class Button(UserControl):
             content=Row(
                 alignment=MainAxisAlignment.CENTER,
                 controls=[
-                    Text(self.btn_name, size=11, weight="bold"),
+                    Text(self.btn_name, size=13, weight="bold"),
                 ],
             ),
             style=ButtonStyle(
                 shape={"": RoundedRectangleBorder(radius=6)},
                 color={"":"white"},
+                bgcolor={"": self.btn_color},
             ),
             height=48,
             width=self.btn_width,
@@ -33,9 +36,20 @@ class Button(UserControl):
 class Segmentation(UserControl):
     def __init__(self):
         self.btn_callback_files = FilePicker(on_result=self.segmentation_files)
-        self.btn_callback_folder = FilePicker(on_result=None)
+        self.btn_callback_folder = FilePicker(on_result=self.segmentation_folder)
         self.session = []
         super().__init__()
+    def segmentation_folder(self, e: FilePickerResultEvent):
+        if e.path:
+            try:
+                path = save[-1]
+                now = datetime.now()
+                file_name = now.strftime("%H:%M:%S")
+                t = f"{file_name}.png"
+                dir = e.path + "/" + t
+                shutil.copy(path, dir)
+            except Exception as e:
+                print("Failed to save file")
     def convert(self, array):
         dir = '/Users/lucian/Documents/GitHub/BrainCancerDetection/tmp'
         now = datetime.now()
@@ -45,18 +59,15 @@ class Segmentation(UserControl):
         cv2.imwrite(path, array)
         return path
     def start_segmentation(self):
-            
         file_to_segment = self.session[0]
         final = run.main(file_to_segment)
         path = self.convert(final) 
         view = controls_dict['After']
         view.content = Column()
-        print(file_to_segment)
-        print(path)
         self.update()
         view.content.controls.append(self.append_image(path))
-        view.content.update()
-        
+        save.append(path)
+        view.content.update() 
     def return_file_list(self, file_icon, file_name, file_path):
         return Column(
             spacing=1,
@@ -69,7 +80,6 @@ class Segmentation(UserControl):
         return Column(
             controls=[Image(file_path, height=375, width=430, fit="contain"),]
         )
-    
     def segmentation_files(self, e: FilePickerResultEvent):
         self.session=[]
         if e.files:
@@ -95,7 +105,6 @@ class Segmentation(UserControl):
                 view.content.update()
         else:
             pass
-
     def segmentation_title(self):
         return Container(
             content=Row(
@@ -113,8 +122,7 @@ class Segmentation(UserControl):
                     )
                 ]
             )
-        )
-    
+        ) 
     def step_one(self):
         return Container(
             height=80,
@@ -126,20 +134,19 @@ class Segmentation(UserControl):
                 vertical_alignment=CrossAxisAlignment.CENTER,
                 controls=[
                     Button("Upload File", 260, 
-                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False),
+                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False),"black",
                            ),
                     self.btn_callback_files,
                     self.btn_callback_folder,
                     Button("Start Segmentation", 260,
-                           lambda __: self.start_segmentation(),
+                           lambda __: self.start_segmentation(),"red",
                            ),
                     Button("Save Output", 260,
-                           lambda __: self.btn_callback_folder.get_directory_path(),
+                           lambda __: self.btn_callback_folder.get_directory_path(),"black",
                            ),
                 ]
             )
-        )
-    
+        ) 
     def step_two(self):
         self.container = Container(
             height=60,
@@ -152,7 +159,6 @@ class Segmentation(UserControl):
         controls_dict["files"] = self.container
 
         return self.container
-    
     def step_three(self, title):
         self.title = title
         self.container = Container(
@@ -173,15 +179,12 @@ class Segmentation(UserControl):
             horizontal_alignment=CrossAxisAlignment.START,
             controls=[
                 self.segmentation_title(),
-                #Divider(height=20, color="transparent"),
-                #Text("", size=14, weight="bold"),
                 self.step_one(),
-                
                 Divider(height=10, color="transparent"),
-                Text("Input file", size=14, weight="bold"),
+                Text("Input file", size=16, weight="bold"),
                 self.step_two(),
                 Divider(height=10, color="transparent"),
-                Text("Before and After", size=14, weight="bold"),
+                Text("Before and After", size=16, weight="bold"),
                 Row(
                    controls=[
                     self.step_three("Before"),

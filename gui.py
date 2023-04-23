@@ -10,7 +10,7 @@ def main(page: ft.Page):
     #NOTE: this is the main page configuration
     page.title = "Brain Cancer Detection"
     page.window_width = 900
-    page.window_height = 840
+    page.window_height = 850
     page.window_title_bar_hidden = True
     page.window_title_bar_buttons_hidden = True
     page.window_resizable = False
