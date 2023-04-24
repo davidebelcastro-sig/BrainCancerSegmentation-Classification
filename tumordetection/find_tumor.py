@@ -5,17 +5,17 @@ import matplotlib.pyplot as plt
 
 def get_probability_of_tumor(area,circularity,colore_tumore,colore_cervello,area_esterna):
 
-    if circularity >= 0.90 and area <= area_esterna*0.15  and abs(colore_tumore-colore_cervello) >= 10:
+    if circularity >= 0.90 and area <= area_esterna*0.20  and abs(colore_tumore-colore_cervello) >= 10:
         return 0.90
-    elif circularity >= 0.90 and area <= area_esterna*0.15  and abs(colore_tumore-colore_cervello) < 10:
+    elif circularity >= 0.90 and area <= area_esterna*0.20  and abs(colore_tumore-colore_cervello) < 10:
         return 0.70
-    elif circularity >= 0.80 and area <= area_esterna*0.15  and abs(colore_tumore-colore_cervello) >= 10:
+    elif circularity >= 0.80 and area <= area_esterna*0.20  and abs(colore_tumore-colore_cervello) >= 10:
         return 0.75
-    elif circularity >= 0.80 and area <= area_esterna*0.15  and abs(colore_tumore-colore_cervello) < 10:
+    elif circularity >= 0.80 and area <= area_esterna*0.20  and abs(colore_tumore-colore_cervello) < 10:
         return 0.65
-    elif circularity >= 0.75 and area <= area_esterna*0.15  and colore_tumore >= 80 and abs(colore_tumore-colore_cervello) >= 10:
+    elif circularity >= 0.75 and area <= area_esterna*0.20  and colore_tumore >= 80 and abs(colore_tumore-colore_cervello) >= 10:
         return 0.70
-    elif circularity >= 0.75 and area <= area_esterna*0.15 and colore_tumore >= 80 and abs(colore_tumore-colore_cervello) < 10:
+    elif circularity >= 0.75 and area <= area_esterna*0.20 and colore_tumore >= 80 and abs(colore_tumore-colore_cervello) < 10:
         return 0.50
     else:
         return 0.30
