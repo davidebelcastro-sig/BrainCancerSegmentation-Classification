@@ -5,6 +5,7 @@ from flet import *
 import run
 import cv2
 from datetime import datetime
+from run import load_image_nii
 controls_dict = {}
 save = []
 class Button(UserControl):
@@ -60,14 +61,22 @@ class Segmentation(UserControl):
         return path
     def start_segmentation(self):
         file_to_segment = self.session[0]
-        final = run.main(file_to_segment)
+        final, probablita, area = run.main(file_to_segment)
         path = self.convert(final) 
         view = controls_dict['After']
+        view_probabilita = controls_dict['probabilita']
+        view_area = controls_dict['area']
+        view_area.content = Column()
+        view_probabilita.content = Column()
         view.content = Column()
         self.update()
         view.content.controls.append(self.append_image(path))
+        view_probabilita.content.controls.append(self.return_stats("bar_chart", "Probabilità Tumore ", str(probablita)))
+        view_area.content.controls.append(self.return_stats("bar_chart", "Area Tumore ", str(area*100)))
         save.append(path)
         view.content.update() 
+        view_probabilita.content.update()
+        view_area.content.update()
     def return_file_list(self, file_icon, file_name, file_path):
         return Column(
             spacing=1,
@@ -76,10 +85,28 @@ class Segmentation(UserControl):
                 Row(controls=[Text(file_path, size=9,no_wrap=False, color="white54"),])
             ]
         )
-    def append_image(self, file_path):
-        return Column(
-            controls=[Image(file_path, height=375, width=430, fit="contain"),]
+    def return_stats(self, icon, name, value):
+        value = value + "%"
+        self.column = Column(
+            spacing=1,
+            controls=[
+                Row(controls=[Icon(icon, size=12),Text(name, size=13),]),
+                Row(controls=[Text(value, size=9,no_wrap=False, color="white54"),])
+            ]
         )
+        return self.column
+    def append_image(self, file_path):
+        check = file_path[-3:]
+        if check == "mat":
+            path = run.load_image_nii(file_path)
+        else:
+            path = file_path
+        self.column =Column(
+            alignment=CrossAxisAlignment.CENTER,
+            horizontal_alignment=MainAxisAlignment.CENTER,
+            controls=[Image(path, height=350, width=430, fit="contain"),]
+        )
+        return self.column
     def segmentation_files(self, e: FilePickerResultEvent):
         self.session=[]
         if e.files:
@@ -162,7 +189,7 @@ class Segmentation(UserControl):
     def step_three(self, title):
         self.title = title
         self.container = Container(
-            height= 380,
+            height= 360,
             width=420,
             border_radius=6,
             border = border.all(0.8, "white24"),
@@ -170,7 +197,19 @@ class Segmentation(UserControl):
         controls_dict[self.title] = self.container
     
         return self.container
+    def step_four(self, title):
+        self.container = Container(
+            height=60,
+            width=420,
+            border=border.all(0.8, "white24"),
+            border_radius=6,
+            padding=12,
+            clip_behavior=ClipBehavior.HARD_EDGE,
+        )
 
+        controls_dict[title] = self.container
+        return self.container
+    
     #NOTE: Main entry point for the Segmentation page
     def build(self):
         return Column(
@@ -180,10 +219,8 @@ class Segmentation(UserControl):
             controls=[
                 self.segmentation_title(),
                 self.step_one(),
-                Divider(height=10, color="transparent"),
                 Text("Input file", size=16, weight="bold"),
                 self.step_two(),
-                Divider(height=10, color="transparent"),
                 Text("Before and After", size=16, weight="bold"),
                 Row(
                    controls=[
@@ -191,5 +228,13 @@ class Segmentation(UserControl):
                     self.step_three("After"),
                    ]
                 ),
+                Text("Some stats for you", size=16, weight="bold"),
+                Row(
+                    controls=[
+                        self.step_four("probabilita"),
+                        self.step_four("area"),
+                    ]
+                ),
+                Divider(height=50, color="transparent"),
             ]
         )

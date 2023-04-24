@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings("ignore")
 import os 
+from PIL import Image
+from datetime import datetime
+
 def get_contourn_external(brain):
     j = brain.copy()
     for i in range(0,brain.shape[0]):
@@ -57,13 +60,13 @@ def get_perimetro_external(brain):
     perimetro_contorno_esterno = cv2.arcLength(countour,True)
     return perimetro_contorno_esterno
 
-def load_image_nii():
-    path = get_random_image.get_random_image()  #load an random image
-    ls = path.split("/")
-    nome_imma = ls[-1]
-    nome_dir  = ls[-2]
-    variable = "./dataset_nii/dataset/"+nome_dir+"/"+nome_imma
-    f = h5py.File(variable, 'r')
+def load_image_nii(input):
+    #path = get_random_image.get_random_image()  #load an random image
+    #ls = path.split("/")
+    #nome_imma = ls[-1]
+    #nome_dir  = ls[-2]
+    #variable = "./dataset_nii/dataset/"+nome_dir+"/"+nome_imma
+    f = h5py.File(input, 'r')
     for el in f['cjdata']:
         if el == 'image':
             image = f['cjdata'][el]
@@ -74,18 +77,17 @@ def load_image_nii():
             label = str(label)
         elif el == 'tumorMask':
             border = f['cjdata'][el]
-    plt.imshow(image,cmap='gray')
-    plt.axis('off')
-    plt.savefig('brain.png')
-    #show tumor on brain
-    plt.imshow(image,cmap='gray')
-    plt.imshow(border,cmap='jet',alpha=0.5)  
-    #vedere la maschera sull'immagine del cervello
-    #come faccio)
-    plt.axis('off')
-    plt.savefig('tumor.png')
-    plt.axis('on')
-    return "brain.png"
+    # /Users/lucian/Documents/GitHub/BrainCancerDetection/tmp/input
+
+    dir = '/Users/lucian/Documents/GitHub/BrainCancerDetection/tmp/input'
+    now = datetime.now()
+    file_name = now.strftime("%H:%M:%S")
+    t = f"{file_name}.png"
+    path = dir + "/" + t
+
+    plt.imsave(path, image, cmap='gray')
+  
+    return path
 
 def load_image_jpg():
     path = get_random_image.random_jpg()  #load an random image
@@ -95,22 +97,10 @@ def load_image_jpg():
     variable = "./dataset_jpg/Testing/"+nome_dir+"/"+nome_imma
     return variable
 
-def download_image(initial, final):
-    dir_path = '/Users/lucian/Documents/GitHub/BrainCancerDetection/processed'
-    for file_name in os.listdir(dir_path):
-        file_path = os.path.join(dir_path, file_name)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-                print(f"Deleted {file_path}")
-        except Exception as e:
-            print(f"Error deleting {file_path}: {e}")
-
-    cv2.imwrite("/Users/lucian/Documents/GitHub/BrainCancerDetection/processed/initial.png", initial)
-    cv2.imwrite("/Users/lucian/Documents/GitHub/BrainCancerDetection/processed/final.png", final)
 
 def main(image):
-    path = image
+    input = image
+    path = load_image_nii(input)
     tupla_return = skull_stripping.get_brain(path)
     brain = tupla_return[1]
     value = tupla_return[0]
@@ -187,7 +177,7 @@ def main(image):
             #cv2.imshow("tumor", my_tumor)
             #cv2.waitKey(0)
             #cv2.destroyAllWindows()
-            return img
+            return img, probabilita, area_relativa
 
         except:
             print("NO TUMOR FOUND")
@@ -227,36 +217,13 @@ def main(image):
             maschera  = np.zeros(img.shape, np.uint8)
             cv2.drawContours(img, [contorno], -1, (0, 255, 0), 3)
             print("TUMOR FOUND")
-            #download_image(copia, img)
-            #cv2.imshow("initial", copia)
-            #cv2.imshow("tumor", img)
-            #cv2.waitKey(0)
-            #cv2.destroyAllWindows()
             print("PROBABILITA' TUMORE: ",str(probabilita),"%")
             #area rispetto alla foto
             area = cv2.contourArea(contorno)
             #area rispetto al contorno esterno
             area_relativa = area/area_contorno_esterno
             print("AREA TUMORE: ",str(area_relativa*100),"%")
-            maschera = cv2.cvtColor(maschera, cv2.COLOR_BGR2GRAY)
-            cv2.drawContours(maschera, [contorno], -1, 255, -1)
-            copia = cv2.cvtColor(copia, cv2.COLOR_BGR2GRAY)
-            my_tumor = cv2.bitwise_and(copia, maschera)  #prendo solo il tumore,sfondo nero
-            #cv2.imshow("tumor", my_tumor)
-            #cv2.waitKey(0)
-            #cv2.destroyAllWindows()
-            return img
+            return img, probabilita, area_relativa
         except:
             print("NO TUMOR FOUND")
             return copia
-            #cv2.imshow("initial", copia)
-            #cv2.imshow("no tumor", copia)
-            #cv2.waitKey(0)
-            #cv2.destroyAllWindows()
-#path = load_image_jpg()
-#path = load_image_nii()
-
-#image = "/Users/lucian/Documents/GitHub/BrainCancerDetection/data-set/Testing/glioma_tumor/image(4).jpg"
-
-# if __name__ == "__main__":
-#     main(image)

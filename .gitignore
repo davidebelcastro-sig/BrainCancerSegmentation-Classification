@@ -79,4 +79,3 @@ cython_debug/
 
 # NOTE: gitignore stuff for specific things.
 data-set/
-tmp/
