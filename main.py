@@ -4,8 +4,6 @@ from flet import *
 #NOTE: import the pages implemented in the gui folder
 from src.gui.segmentation import Segmentation
 from src.gui.filters import Filters
-# import filters as fil
-# import view as vi 
 
 def main(page: ft.Page):
     #NOTE: this is the main page configuration

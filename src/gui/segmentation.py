@@ -53,7 +53,7 @@ class Segmentation(UserControl):
             except Exception as e:
                 print("Failed to save file")
     def convert(self, array):
-        dir = '/Users/lucian/Documents/GitHub/BrainCancerDetection/tmp'
+        dir = './tmp'
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -210,7 +210,6 @@ class Segmentation(UserControl):
 
         controls_dict[title] = self.container
         return self.container
-    
     #NOTE: Main entry point for the Segmentation page
     def build(self):
         return Column(
