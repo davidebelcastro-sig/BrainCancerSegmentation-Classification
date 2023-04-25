@@ -263,7 +263,7 @@ class Filters(UserControl):
 
     def card(self):
         self.container = Container(
-            height=420,
+            height=450,
             border=border.all(0.8, "white24"),
             border_radius=6,
             padding=10,
@@ -278,9 +278,11 @@ class Filters(UserControl):
                           controls=[
                             Text("Increment/decrement light", size=12, weight="bold"),
                             AppCounter(),
-                            Text("Image without segmented edge ?", size=12, weight="bold"),
+                            Text("Image with colored segmentation ?", size=12, weight="bold"),
                             AppSizeMenu(),
                             Text("Image with only the tumor ?", size=12, weight="bold"),
+                            AppSizeMenu(),
+                            Text("Image without segmentation ?", size=12, weight="bold"),
                             AppSizeMenu(),
                             Divider(height=15, color="transparent"),
                             AppButton(lambda e: self.generate_image(e)),

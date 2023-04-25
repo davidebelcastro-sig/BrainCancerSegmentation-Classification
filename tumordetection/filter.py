@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-
 def find_tumor(color_tumor,color_brain,brain,vetto,segm,mylist):
     my_interesed = []
     lista_riserva = []
