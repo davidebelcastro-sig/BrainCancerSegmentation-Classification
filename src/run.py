@@ -1,16 +1,15 @@
 import cv2
 import numpy as np
-from skullstripping import get_random_image
-from skullstripping import skull_stripping
-from skullstripping import strong_skull_stripping
-from tumordetection import get_mean_color_tumor
-from tumordetection import find_tumor
+from src.skullstripping import get_random_image
+from src.skullstripping import skull_stripping
+from src.skullstripping import strong_skull_stripping
+from src.tumordetection import get_mean_color_tumor
+from src.tumordetection import find_tumor
 import h5py
 import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings("ignore")
 import os 
-from PIL import Image
 from datetime import datetime
 
 def get_contourn_external(brain):

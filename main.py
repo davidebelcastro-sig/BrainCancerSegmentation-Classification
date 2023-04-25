@@ -2,9 +2,10 @@ import flet as ft
 from flet import *
 
 #NOTE: import the pages implemented in the gui folder
-import segmentation as seg
-import filters as fil
-import view as vi 
+from src.gui.segmentation import Segmentation
+from src.gui.filters import Filters
+# import filters as fil
+# import view as vi 
 
 def main(page: ft.Page):
     #NOTE: this is the main page configuration
@@ -30,8 +31,10 @@ def main(page: ft.Page):
             ft.NavigationDestination(icon=ft.icons.SETTINGS,label="Filters"),
         ]
     )
-    tab_1 = seg.Segmentation()
-    tab_2 = fil.Filters()
+    seg = Segmentation()
+    fil = Filters()
+    tab_1 = seg
+    tab_2 = fil
     #tab_3 = vi.View()
     page.add(Container(content=Column([tab_1,tab_2,])),)
 #NOTE: this is the main entry point for the application

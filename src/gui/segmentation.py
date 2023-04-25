@@ -1,11 +1,12 @@
 import shutil
-import time
 import flet 
 from flet import *
-import run
 import cv2
 from datetime import datetime
-from run import load_image_nii
+
+from src import run
+
+
 controls_dict = {}
 save = []
 class Button(UserControl):

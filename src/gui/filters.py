@@ -1,7 +1,7 @@
 import flet 
 from flet import *
-from segmentation import Button
-import filter
+from src.gui.segmentation import Button
+from src.filter import main
 import cv2
 from datetime import datetime
 
@@ -246,7 +246,7 @@ class Filters(UserControl):
                                 ans = str(item.controls[0].value)
                                 c.append(ans)
 
-        result = filter.main(c, self.session[-1])
+        result = main(c, self.session[-1])
         path = self.convert(result)
         
         image[-1].controls.append(
