@@ -45,7 +45,7 @@ class Segmentation(UserControl):
             try:
                 path = save[-1]
                 now = datetime.now()
-                file_name = now.strftime("%H:%M:%S")
+                file_name = now.strftime("%H_%M_%S")
                 t = f"{file_name}.png"
                 dir = e.path + "/" + t
                 shutil.copy(path, dir)

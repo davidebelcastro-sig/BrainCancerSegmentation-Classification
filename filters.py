@@ -1,18 +1,24 @@
 import flet 
 from flet import *
 from segmentation import Button
+import filter
+import cv2
+from datetime import datetime
+
+controls_dict = {}
 data = []
+image=[]
 class AppCounter(UserControl):
     def __init__(self):
         super().__init__()
     
     def app_counter_add(self, e):
-        count = int(self.app_counter_text.value) + 1
+        count = int(self.app_counter_text.value) + 10
         self.app_counter_text.value = str(count)
         self.app_counter_text.update()
 
     def app_counter_sub(self, e):
-        count = int(self.app_counter_text.value) - 1
+        count = int(self.app_counter_text.value) - 10
         self.app_counter_text.value = str(count)
         self.app_counter_text.update()
 
@@ -149,10 +155,33 @@ class Filters(UserControl):
                 ]
             )
         )
-    
+    def return_file_list(self, file_icon, file_name, file_path):
+        return Column(
+            spacing=1,
+            controls=[
+                Row(controls=[Icon(file_icon, size=12),Text(file_name, size=13),]),
+                Row(controls=[Text(file_path, size=9,no_wrap=False, color="white54"),])
+            ]
+        )
     def segmentation_files(self, e: FilePickerResultEvent):
-        
-        pass
+        self.session=[]
+        if e.files:
+            control = controls_dict['files']
+            control.content = Column(
+                scroll='auto',
+                expand=True,
+            )
+            self.update()
+            for file in e.files:
+                self.session.append(file.path)
+                control.content.controls.append(
+                    self.return_file_list(
+                        icons.FILE_COPY_ROUNDED, file.name, file.path
+                    )
+                )
+                control.content.update()
+        else:
+            pass
 
     def step_one(self):
         return Container(
@@ -185,10 +214,17 @@ class Filters(UserControl):
             clip_behavior=ClipBehavior.HARD_EDGE,
         )
 
-        #controls_dict["files"] = self.container
+        controls_dict["files"] = self.container
 
         return self.container
-    
+    def convert(self, array):
+        dir = '/Users/lucian/Documents/GitHub/BrainCancerDetection/tmp/filters'
+        now = datetime.now()
+        file_name = now.strftime("%H:%M:%S")
+        t = f"{file_name}.png"
+        path = dir + "/" + t
+        cv2.imwrite(path, array)
+        return path
     def generate_image(self, e):
         stuff = data[-1]
         data_list = []
@@ -210,10 +246,19 @@ class Filters(UserControl):
                                 ans = str(item.controls[0].value)
                                 c.append(ans)
 
-        #TODO => I have all the data inside c
-        # i need to send it to the backend and get the new image
-
-        print(c)
+        result = filter.main(c, self.session[-1])
+        path = self.convert(result)
+        
+        image[-1].controls.append(
+            Container(
+                width=400,
+                height=400,
+                image_src=path,
+                image_fit='cover',
+                border_radius=8,
+        )
+        )
+        image[-1].update()
 
 
     def card(self):
@@ -249,13 +294,20 @@ class Filters(UserControl):
                     Container(
                         width=400,
                         height=400,
-                        content=Column()
+                        content=Column(
+                            scroll = 'auto',
+                            expand=True,
+                            alignment=MainAxisAlignment.CENTER,
+                            controls=[]
+                        )
                     ),                
                 ]
             )
         )
         instance = self.container.content.controls[0].content.controls[:]
+        p=self.container.content.controls[2].content
         data.append(instance)
+        image.append(p)
         return self.container
     
     def build(self):
@@ -265,7 +317,6 @@ class Filters(UserControl):
             horizontal_alignment=CrossAxisAlignment.START,
             controls=[
                 self.filters_title(),
-                #Divider(height=20, color="transparent"),
                 self.step_one(),
                 Text("Input file", size=16, weight="bold"),
                 self.step_two(),
