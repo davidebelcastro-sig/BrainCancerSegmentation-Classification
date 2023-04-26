@@ -77,7 +77,8 @@ def load_image_nii(input):
         elif el == 'tumorMask':
             border = f['cjdata'][el]
 
-    dir = './tmp/input'
+    #dir = './tmp/input'
+    dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/input'
     now = datetime.now()
     file_name = now.strftime("%H:%M:%S")
     t = f"{file_name}.png"
@@ -180,10 +181,6 @@ def main(image):
         except:
             print("NO TUMOR FOUND")
             return copia
-            #cv2.imshow("initial", copia)
-            #cv2.imshow("no tumor", copia)
-            #cv2.waitKey(0)
-            #cv2.destroyAllWindows()
 
     else:
         print("Putroppo non riuscito a estrapolare il cervello eliminando i bordi,provo comunque ad effettuare l'analisi")

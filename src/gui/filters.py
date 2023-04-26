@@ -1,13 +1,15 @@
-import flet 
 from flet import *
-from src.gui.segmentation import Button
-from src.filter import main
 import cv2
 from datetime import datetime
+
+#NOTE: import the button class and the script that runs the filters
+from src.gui.segmentation import Button
+from src.filter import main
 
 controls_dict = {}
 data = []
 image=[]
+history = []
 class AppCounter(UserControl):
     def __init__(self):
         super().__init__()
@@ -155,6 +157,7 @@ class Filters(UserControl):
                 ]
             )
         )
+    
     def return_file_list(self, file_icon, file_name, file_path):
         return Column(
             spacing=1,
@@ -182,7 +185,6 @@ class Filters(UserControl):
                 control.content.update()
         else:
             pass
-
     def step_one(self):
         return Container(
             height=80,
@@ -204,7 +206,6 @@ class Filters(UserControl):
                 ]
             )
         )
-
     def step_two(self):
         self.container = Container(
             height=60,
@@ -218,7 +219,8 @@ class Filters(UserControl):
 
         return self.container
     def convert(self, array):
-        dir = '/Users/lucian/Documents/GitHub/BrainCancerDetection/tmp/filters'
+        #dir = './tmp/filters'
+        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -245,22 +247,22 @@ class Filters(UserControl):
                             if checks.content.value == True:
                                 ans = str(item.controls[0].value)
                                 c.append(ans)
-
         result = main(c, self.session[-1])
-        path = self.convert(result)
-        
-        image[-1].controls.append(
-            Container(
-                width=400,
-                height=400,
-                image_src=path,
-                image_fit='cover',
-                border_radius=8,
-        )
-        )
-        image[-1].update()
-
-
+        if result == []:
+            print("vuoto")
+            pass
+        else:
+            path = self.convert(result)
+            image[-1].controls.append(
+                Container(
+                    width=400,
+                    height=400,
+                    image_src=path,
+                    image_fit='cover',
+                    border_radius=8,)
+            )
+            image[-1].update()
+            history.append(path)
     def card(self):
         self.container = Container(
             height=450,
@@ -313,7 +315,7 @@ class Filters(UserControl):
         return self.container
     
     def build(self):
-        return Column(
+        self.column = Column(
             expand=True,
             alignment=MainAxisAlignment.START,
             horizontal_alignment=CrossAxisAlignment.START,
@@ -326,3 +328,5 @@ class Filters(UserControl):
                 self.card(),
             ]
         )
+        controls_dict['main'] = self.column
+        return self.column
