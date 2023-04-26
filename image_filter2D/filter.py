@@ -4,25 +4,21 @@ import numpy as np
 
 
 
-def get_contourn_external_withBord(brain):
-    brain = cv2.cvtColor(brain, cv2.COLOR_BGR2GRAY)
-    j = brain.copy()
-    j[j == 255]  = 0 
-    j[j <=4]  = 0
-    for i in range(0,brain.shape[0]):
-        for y in range(0,brain.shape[1]):
-            if j[i][y] != 0:
-                j[i][y] = 255
-
-    #find contours
-    contours, hierarchy = cv2.findContours(j,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-    #disegno il piu grande contorno
-    countour = max(contours, key=cv2.contourArea)
-    #disegno contorno
-    return countour
-
-
-
+def get_contourn(immagine_segmentata):
+    for x in range(len(immagine_segmentata)):
+        for y in range(len(immagine_segmentata)):
+            if immagine_segmentata[x][y][0] == 0 and  immagine_segmentata[x][y][1] == 255  and  immagine_segmentata[x][y][2] == 0:
+                immagine_segmentata[x][y][0] = 255
+                immagine_segmentata[x][y][1] = 255
+                immagine_segmentata[x][y][2] = 255
+            else:
+                immagine_segmentata[x][y][0] = 0
+                immagine_segmentata[x][y][1] = 0
+                immagine_segmentata[x][y][2] = 0
+    immagine_segmentata =  cv2.cvtColor(immagine_segmentata, cv2.COLOR_BGR2GRAY)
+    contours, hierarchy = cv2.findContours(immagine_segmentata,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    contours = sorted(contours, key=cv2.contourArea, reverse=True)
+    return contours[0]
 
 
 
@@ -84,9 +80,10 @@ def save_image(immagine_iniziale,nome):
     return 0
     
 if __name__=='__main__':
-    contorno = get_contourn_external_withBord(cv2.imread('/Users/lucian/Documents/GitHub/BrainCancerDetection/image_filter2D/brain.png'))
-    #modify_light_contorno(cv2.imread('/Users/lucian/Documents/GitHub/BrainCancerDetection/image_filter2D/brain.png'),contorno,50,1)
-    r = get_only_contorno(cv2.imread('/Users/lucian/Documents/GitHub/BrainCancerDetection/image_filter2D/brain.png'),contorno)
-    cv2.imshow('r',r)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    contorno = get_contourn(cv2.imread('brain.png'))
+    #pass
+    modify_light_contorno(cv2.imread('brain.png'),contorno,50,1)
+   # r = get_only_contorno(cv2.imread('brain.png'),contorno)
+    #cv2.imshow('r',r)
+    #cv2.waitKey(0)
+   # cv2.destroyAllWindows()
