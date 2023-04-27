@@ -103,7 +103,6 @@ class AppSizeMenu(UserControl):
                 controls=[
                     self.app_size_main_builder("Yes"),
                     self.app_size_main_builder("No"),
-                    self.app_size_main_builder("Pass"),
                 ],
             )
         )

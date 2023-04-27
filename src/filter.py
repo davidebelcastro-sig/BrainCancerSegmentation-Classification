@@ -2,11 +2,7 @@ import cv2
 import random
 import numpy as np
 
-
-
-
 def get_contourn(immagine_segmentata):
-
     for x in range(len(immagine_segmentata)):
         for y in range(len(immagine_segmentata)):
             try:
@@ -20,25 +16,16 @@ def get_contourn(immagine_segmentata):
                     immagine_segmentata[x][y][2] = 0
             except:
                 pass
-
     immagine_segmentata =  cv2.cvtColor(immagine_segmentata, cv2.COLOR_BGR2GRAY)
     contours, hierarchy = cv2.findContours(immagine_segmentata,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)
     return contours[0]
 
-
-
-#elimina bordo:ritorno l'immagine iniziale
 def remove_border(immagine_iniziale):
     return immagine_iniziale
 
-
-#modificare luce del contorno
 def modify_light_contorno(immagine_iniziale,contorno,percentuale,segno):
-    immagine_iniziale = cv2.cvtColor(immagine_iniziale, cv2.COLOR_BGR2GRAY)
-    cv2.imshow('immagine_iniziale',immagine_iniziale)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #immagine_iniziale = cv2.cvtColor(immagine_iniziale, cv2.COLOR_BGR2GRAY)
     copia = immagine_iniziale.copy()
     lista_pixel = []
     cv2.drawContours(copia, [contorno], -1, 255, -1)
@@ -49,68 +36,22 @@ def modify_light_contorno(immagine_iniziale,contorno,percentuale,segno):
                     lista_pixel.append((i,y))
             except:
                 pass
-    #tutto quello dentro il contorno lo auemtno/abbassiamo di percentuale
     if segno == 1:
         for pixel in lista_pixel:
             immagine_iniziale[pixel[0]][pixel[1]]=min(immagine_iniziale[pixel[0]][pixel[1]] + (immagine_iniziale[pixel[0]][pixel[1]]*percentuale)/100,255)
-        cv2.imshow('moidificata',immagine_iniziale)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
     else:
         for pixel in lista_pixel:
             immagine_iniziale[pixel[0]][pixel[1]] = max(immagine_iniziale[pixel[0]][pixel[1]] - (immagine_iniziale[pixel[0]][pixel[1]]*percentuale)/100,0)
-        cv2.imshow('moidificata',immagine_iniziale)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
     return immagine_iniziale
 
-
-
-
-
-
-
 def get_only_contorno(immagine_iniziale,contorno):
-    immagine_iniziale = cv2.cvtColor(immagine_iniziale, cv2.COLOR_BGR2GRAY)
+    #immagine_iniziale = cv2.cvtColor(immagine_iniziale, cv2.COLOR_BGR2GRAY)
     mask = np.zeros(immagine_iniziale.shape[:2], np.uint8)
     cv2.drawContours(mask, [contorno], -1, 255, -1)
     result = cv2.bitwise_and(immagine_iniziale, immagine_iniziale, mask=mask)
     return result
-'''
-Main entry point for the filter script
-'''
-def main(data,path):
-    print(data)
-    # if data[0] != 0:
-    #     contorno = get_contourn(cv2.imread(path))
-    #     check = int(data[0])
-    #     if check>0: 
-    #         segno = 1 
-    #     else: segno = -1
-    #     result = modify_light_contorno(cv2.imread(path),contorno,check,segno)
-    #     if data[1] and data[2] and data[3]== 'Pass': 
-    #         return result
-    #     else:
-    #         pass
-    if data[2] == 'Yes':
-        print('voglio il contorno')
-        contorno = get_contourn(cv2.imread(path))
-        result = get_only_contorno(cv2.imread(path),contorno)
-        return []
-    else:
-        print('non voglio il contorno')
-
-
-
-#inserire SOLO NOME
-def save_image(immagine_iniziale,nome):
-    nome=nome+'.png'
-    cv2.imwrite(nome,immagine_iniziale)
-    return 0
     
-
 def get_colore(img,x,y):
-    #prendo quello il piu scuro tra quello a sx e dx,se entrambi = a 150 continuo
     i = 0
     while 1:
         i+=1
@@ -129,10 +70,7 @@ def get_colore(img,x,y):
             pass
 
 def leva_contorno(immagine_iniziale,contorno):
-    #voglio eliminare il contorno e colorare con i pixel interni al contorno
-    immagine_iniziale = cv2.cvtColor(immagine_iniziale, cv2.COLOR_BGR2GRAY)
-    #ogni pixel di immagine iniziale == 150 deve prendere il valore che hail pixe piu vicino a lui  != 150
-
+    #immagine_iniziale = cv2.cvtColor(immagine_iniziale, cv2.COLOR_BGR2GRAY)
     for x in range(len(immagine_iniziale)):
         for y in range(len(immagine_iniziale)):
             try:
@@ -143,32 +81,66 @@ def leva_contorno(immagine_iniziale,contorno):
                 pass
     return immagine_iniziale
 
-
-
 def color_contourn(immagine_iniziale,contorno):
-    #coloro il contorno con un colore che fa vedere il colore originale(una specie di trasparenza)
     im_copy = immagine_iniziale.copy()
     im_copy = cv2.drawContours(im_copy, [contorno], -1, (0, 0, 255), -1)
     im = cv2.addWeighted(im_copy, 0.4, immagine_iniziale, 1 - 0.2, 0)
     im = cv2.drawContours(im, [contorno], -1, (0, 0, 255), 0)
     return im
     
-
-
-
-
-if __name__=='__main__':
-    contorno = get_contourn(cv2.imread('brain.png'))
-    #pass
-    cv2.imshow("initial",cv2.imread('brain.png'))
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    img = color_contourn(cv2.imread('brain.png'),contorno)
-    cv2.imshow("finale",img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-   # modify_light_contorno(cv2.imread('brain.png'),contorno,50,1)
-   # r = get_only_contorno(cv2.imread('brain.png'),contorno)
-    #cv2.imshow('r',r)
-    #cv2.waitKey(0)
-   # cv2.destroyAllWindows()
+'''
+Main entry point for the filter script
+'''
+def main(data,path):
+    print(data)
+    contorno = get_contourn(cv2.imread(path))
+    processed = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2GRAY)
+    if len(data) == 0 or len(data) == 1 or len(data) == 2 or len(data) == 3:
+        #* DONE
+        print("Error: missing data")
+        return []
+    elif data[0] != '0':
+        check = int(data[0])
+        if check>0: 
+            segno = 1 
+        else: segno = -1
+        result = modify_light_contorno(processed,contorno,check,segno)
+        if data[1]== 'No' and data[2]== 'No' and data[3]== 'No': 
+            #* DONE
+            return result
+        elif data[1] == 'No' and data[2] == 'Yes' and data[3] == 'No':
+            #* DONE
+            result = get_only_contorno(result,contorno)
+            return result
+        elif data[1] == 'No' and data[2] == 'No' and data[3] == 'Yes':
+            #* DONE
+            result = leva_contorno(result,contorno)
+            return result
+        elif data[1] == 'Yes':
+            print('Non puoi selezionare la colorazione in questa combinazione di filtri')
+            return []
+        elif data[2] == 'Yes' and data[3] == 'Yes':
+            print("Non puoi selezionare il tumore soltanto e l immagine senza contorno")
+            return []
+        else:
+            return []
+    elif data[0] == '0' and data[1] == 'Yes' and data[2] == 'Yes' and data[3] == 'No':
+        #* DONE
+        result = color_contourn(cv2.imread(path),contorno)
+        result = get_only_contorno(result,contorno)
+        return result
+    elif data[0] == '0' and data[1] == 'Yes' and data[2] == 'No' and data[3] == 'No':
+        #* DONE
+        result = color_contourn(cv2.imread(path),contorno)
+        return result
+    elif data[0] == '0' and data[1] == 'No' and data[2] == 'Yes' and data[3] == 'No':
+        #* DONE
+        result = get_only_contorno(processed,contorno)
+        return result
+    elif data[0] == '0' and data[1] == 'No' and data[2] == 'No' and data[3] == 'Yes':
+        #* DONE
+        result = leva_contorno(processed,contorno)
+        return result
+    else:
+        print("porcamadonna")
+        return []
