@@ -10,24 +10,38 @@ controls_dict = {}
 data = []
 image=[]
 history = []
+temp = []
+
+'''
+#TODO:
+'''
 class AppCounter(UserControl):
+    '''
+    #TODO:
+    '''
     def __init__(self):
         super().__init__()
-    
+    '''
+    #TODO:
+    ''' 
     def app_counter_add(self, e):
         count = int(self.app_counter_text.value) + 10
         self.app_counter_text.value = str(count)
         self.app_counter_text.update()
-
+    '''
+    #TODO:
+    '''
     def app_counter_sub(self, e):
         count = int(self.app_counter_text.value) - 10
         self.app_counter_text.value = str(count)
         self.app_counter_text.update()
-
+    '''
+    #TODO:
+    '''
     def build(self):
         self.app_counter_text=Text("0", size=12, color='black')
         return Container(
-            height=45,
+            height=35,
             border_radius=6,
             bgcolor="#ebebeb",
             content=Row(
@@ -49,12 +63,18 @@ class AppCounter(UserControl):
                 ],
             ),
         )
-    pass
-
+'''
+#TODO:
+'''
 class AppSizeMenu(UserControl):
+    '''
+    #TODO:
+    '''
     def __init__(self):
         super().__init__()
-    
+    '''
+    #TODO:
+    '''
     def change_box(self, e):
         for check in self.controls[0].content.controls[:]:
             check.controls[1].content.value=False
@@ -63,6 +83,9 @@ class AppSizeMenu(UserControl):
             e.control.value=True
             e.control.update()
         pass
+    '''
+    #TODO:
+    '''
     def app_size_container(self):
         return Container(
             border_radius=30,
@@ -76,11 +99,13 @@ class AppSizeMenu(UserControl):
                 on_change=lambda e:self.change_box(e),
             ),
         )
-
+    '''
+    #TODO:
+    '''
     def app_size_main_builder(self, size:str):
         return Column(
             horizontal_alignment=CrossAxisAlignment.CENTER,
-            spacing=4,
+            spacing=1,
             controls=[
                 Text(
                     value=size,
@@ -91,10 +116,12 @@ class AppSizeMenu(UserControl):
                 self.app_size_container()
             ]
         )
-
+    '''
+    #TODO:
+    '''
     def build(self):
         return Container(
-            height=50,
+            height=45,
             border_radius=6,
             bgcolor="#ebebeb",
             content=Row(
@@ -106,24 +133,31 @@ class AppSizeMenu(UserControl):
                 ],
             )
         )
-
+'''
+#TODO:
+'''
 class AppButton(UserControl):
+    '''
+    #TODO:
+    '''
     def __init__(self, function):
         self.function = function
         super().__init__()
-    
+    '''
+    #TODO:
+    '''
     def build(self):
         return Container(
             alignment=alignment.center,
             content=ElevatedButton(
                 on_click=self.function,
-                bgcolor="red",
+                bgcolor="orange",
                 color="white",
                 height=45,
                 content=Row(
                     alignment=MainAxisAlignment.CENTER,
                     controls=[
-                        Text("Generate new image", size=15, weight="bold"),
+                        Text("Generate new image", size=13, weight="bold"),
                     ]
                 ),
                 style=ButtonStyle(
@@ -131,14 +165,21 @@ class AppButton(UserControl):
                 ),
             ),
         )
-
+'''
+#TODO:
+'''
 class Filters(UserControl):
+    '''
+    #TODO:
+    '''
     def __init__(self):
         self.btn_callback_files = FilePicker(on_result=self.segmentation_files)
         self.btn_callback_folder = FilePicker(on_result=None)
         self.session = []
         super().__init__()
-    
+    '''
+    #TODO:
+    '''   
     def filters_title(self):
         return Container(
             content=Row(
@@ -156,7 +197,9 @@ class Filters(UserControl):
                 ]
             )
         )
-    
+    '''
+    #TODO:
+    '''   
     def return_file_list(self, file_icon, file_name, file_path):
         return Column(
             spacing=1,
@@ -165,6 +208,9 @@ class Filters(UserControl):
                 Row(controls=[Text(file_path, size=9,no_wrap=False, color="white54"),])
             ]
         )
+    '''
+    #TODO:
+    '''   
     def segmentation_files(self, e: FilePickerResultEvent):
         self.session=[]
         if e.files:
@@ -184,6 +230,31 @@ class Filters(UserControl):
                 control.content.update()
         else:
             pass
+    '''
+    #TODO:
+    '''   
+    def error_msg(self, type, msg):
+        if type == 'Error':
+            icon = icons.ERROR_OUTLINE
+            text = 'Error message'
+            col = "red"
+        elif type == 'Success':
+            icon = icons.CHECK_CIRCLE_OUTLINE
+            text = 'Success message'
+            col = "green"
+        else:
+            print('Something went wrong')
+        self.column = Column(
+            spacing=1,
+            controls=[
+                Row(controls=[Icon(icon, size=12),Text(text, size=13, color=col)]),
+                Row(controls=[Text(msg, size=9,no_wrap=False, color="white54"),])
+            ]
+        )
+        return self.column
+    '''
+    #TODO:
+    '''   
     def step_one(self):
         return Container(
             height=80,
@@ -205,6 +276,9 @@ class Filters(UserControl):
                 ]
             )
         )
+    '''
+    #TODO:
+    '''   
     def step_two(self):
         self.container = Container(
             height=60,
@@ -217,6 +291,9 @@ class Filters(UserControl):
         controls_dict["files"] = self.container
 
         return self.container
+    '''
+    #TODO:
+    '''   
     def convert(self, array):
         #dir = './tmp/filters'
         dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
@@ -226,6 +303,9 @@ class Filters(UserControl):
         path = dir + "/" + t
         cv2.imwrite(path, array)
         return path
+    '''
+    #TODO:
+    '''  
     def generate_image(self, e):
         stuff = data[-1]
         data_list = []
@@ -234,8 +314,7 @@ class Filters(UserControl):
             if not isinstance(d, Text):
                 if not isinstance(d, Divider):
                     if not isinstance(d, AppButton):
-                        data_list.append(d.controls[0].content)
-        
+                        data_list.append(d.controls[0].content)   
         for p in data_list:
             for item in p.controls[:]:
                 if isinstance(item, Text):
@@ -247,9 +326,15 @@ class Filters(UserControl):
                                 ans = str(item.controls[0].value)
                                 c.append(ans)
         result = main(c, self.session[-1])
-        if result == []:
-            print("vuoto")
-            pass
+        if type(result) == str:
+            control = controls_dict['error']
+            control.content = Column(
+                scroll='auto',  
+                expand=True,
+            )
+            self.update()
+            control.content.controls.append(self.error_msg("Error", result))
+            control.content.update()
         else:
             path = self.convert(result)
             image[-1].controls.append(
@@ -262,9 +347,20 @@ class Filters(UserControl):
             )
             image[-1].update()
             history.append(path)
+            control = controls_dict['error']
+            control.content = Column(
+                scroll='auto',  
+                expand=True,
+            )
+            self.update()
+            control.content.controls.append(self.error_msg("Success", "Congratulations, your image has been generated!"))
+            control.content.update()
+    '''
+    #TODO:
+    '''
     def card(self):
         self.container = Container(
-            height=450,
+            height=400,
             border=border.all(0.8, "white24"),
             border_radius=6,
             padding=10,
@@ -285,7 +381,7 @@ class Filters(UserControl):
                             AppSizeMenu(),
                             Text("Image without segmentation ?", size=12, weight="bold"),
                             AppSizeMenu(),
-                            Divider(height=15, color="transparent"),
+                            Divider(height=0, color="transparent"),
                             AppButton(lambda e: self.generate_image(e)),
                           ]  
                         ),
@@ -312,7 +408,24 @@ class Filters(UserControl):
         data.append(instance)
         image.append(p)
         return self.container
-    
+    '''
+    #TODO:
+    '''
+    def error(self):
+        self.container = Container(
+            height=60,
+            border=border.all(0.8, "white24"),
+            border_radius=6,
+            padding=12,
+            clip_behavior=ClipBehavior.HARD_EDGE,
+        )
+
+        controls_dict["error"] = self.container
+
+        return self.container
+    '''
+    #TODO:
+    '''
     def build(self):
         self.column = Column(
             expand=True,
@@ -325,7 +438,7 @@ class Filters(UserControl):
                 self.step_two(),
                 Text("Select Options", size=16, weight="bold"),
                 self.card(),
+                self.error(),
             ]
         )
-        controls_dict['main'] = self.column
         return self.column

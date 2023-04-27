@@ -191,7 +191,7 @@ class Segmentation(UserControl):
                     Button("Upload File", 260,lambda __: self.btn_callback_files.pick_files(allow_multiple=False),"black"),
                     self.btn_callback_files,
                     self.btn_callback_folder,
-                    Button("Start Segmentation", 260,lambda __: self.start_segmentation(),"red"),
+                    Button("Start Segmentation", 260,lambda __: self.start_segmentation(),"green"),
                     Button("Save Output", 260,lambda __: self.btn_callback_folder.get_directory_path(),"black"),
                 ]
             )
