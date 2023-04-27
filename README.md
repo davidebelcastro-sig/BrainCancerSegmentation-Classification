@@ -30,5 +30,5 @@ pip3 install -r requirements.txt
 > This project is licensed under the terms of the MIT license. See [LICENSE](LICENSE) for more details.
 
 ## Credits
-- Brain Segmentation developed by [Davide Belcastro]().
+- Brain Cancer Segmentation developed by [Davide Belcastro]().
 - GUI developed by [Lucian D. Crainic]().
