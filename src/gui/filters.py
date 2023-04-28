@@ -294,8 +294,8 @@ class Filters(UserControl):
     #TODO:
     '''   
     def convert(self, array):
-        #dir = './tmp/filters'
-        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
+        dir = './tmp/filters'
+        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"

@@ -6,7 +6,7 @@ import warnings
 from datetime import datetime
 
 #NOTE: import scripts from src folder for skull stripping and tumor detection
-from src.skullstripping import get_random_image
+#from src.skullstripping import get_random_image
 from src.skullstripping import skull_stripping
 from src.skullstripping import strong_skull_stripping
 from src.tumordetection import get_mean_color_tumor
@@ -71,8 +71,8 @@ def load_image_nii(input):
             label = str(label)
         elif el == 'tumorMask':
             border = f['cjdata'][el]
-    #dir = './tmp/input'
-    dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/input'
+    dir = './tmp/input'
+    #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/input'
     now = datetime.now()
     file_name = now.strftime("%H:%M:%S")
     t = f"{file_name}.png"
