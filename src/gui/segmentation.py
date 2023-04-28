@@ -128,8 +128,8 @@ class Segmentation(UserControl):
     Appends the image to the container that will be displayed
     '''
     def append_image(self, file_path):
-        check = file_path[-3:]
-        if check == "mat":
+        #check = file_path[-3:]
+        if file_path.endswith('mat'):
             path = run.load_image_nii(file_path)
         else:
             path = file_path
