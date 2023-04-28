@@ -83,9 +83,10 @@ def load_image_nii(input):
 Main entry point for the brain cancer segmentation script
 '''
 def main(image):
-    inp = image
-    path = load_image_nii(inp)
-    #TODO: controlla se il file e' di tipo .mat o .jpg
+    if image[-3:] == 'mat':
+        path = load_image_nii(image)
+    else:
+        path = image
     tupla_return = skull_stripping.get_brain(path)
     brain = tupla_return[1]
     value = tupla_return[0]
