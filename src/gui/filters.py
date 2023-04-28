@@ -265,7 +265,7 @@ class Filters(UserControl):
                 vertical_alignment=CrossAxisAlignment.CENTER,
                 controls=[
                     Button("Upload Image", 260, 
-                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False,allowed_extensions = [".png", ".jpg", ".jpeg"]),"black"
+                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False,allowed_extensions = ["png", "jpg", "jpeg"]),"black"
                            ),
                     self.btn_callback_files,
                     #self.btn_callback_folder,
