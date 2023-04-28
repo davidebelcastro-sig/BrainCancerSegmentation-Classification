@@ -1,7 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 import h5py
-from skull_stripping import get_brain
+from src.skull_stripping import get_brain
 from strong_skull_stripping import strong_skull
 import csv
 import get_mean_color_tumor

@@ -97,7 +97,6 @@ def color_contourn(immagine_iniziale,contorno):
 Main entry point for the filter script
 '''
 def main(data,path):
-    print(data)
     contorno = get_contourn(cv2.imread(path))
     processed = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2GRAY)
     if len(data) == 0 or len(data) == 1 or len(data) == 2 or len(data) == 3:

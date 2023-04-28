@@ -10,7 +10,6 @@ controls_dict = {}
 data = []
 image=[]
 history = []
-temp = []
 
 '''
 #TODO:
