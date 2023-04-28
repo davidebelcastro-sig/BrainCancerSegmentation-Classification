@@ -83,7 +83,7 @@ def load_image_nii(input):
 Main entry point for the brain cancer segmentation script
 '''
 def main(image):
-    if image[-3:] == 'mat':
+    if image.endswith('.mat'):
         path = load_image_nii(image)
     else:
         path = image

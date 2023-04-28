@@ -188,7 +188,7 @@ class Segmentation(UserControl):
                 alignment=MainAxisAlignment.CENTER,
                 vertical_alignment=CrossAxisAlignment.CENTER,
                 controls=[
-                    Button("Upload File", 260,lambda __: self.btn_callback_files.pick_files(allow_multiple=False, allowed_extensions = [".png", ".jpg", ".jpeg", ".mat"]),"black"),
+                    Button("Upload File", 260,lambda __: self.btn_callback_files.pick_files(allow_multiple=False, allowed_extensions = ["png", "jpg", "jpeg", "mat"]),"black"),
                     self.btn_callback_files,
                     self.btn_callback_folder,
                     Button("Start Segmentation", 260,lambda __: self.start_segmentation(),"green"),
