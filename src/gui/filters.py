@@ -1,3 +1,4 @@
+import os
 import shutil
 from flet import *
 import cv2
@@ -265,14 +266,15 @@ class Filters(UserControl):
                 alignment=MainAxisAlignment.CENTER,
                 vertical_alignment=CrossAxisAlignment.CENTER,
                 controls=[
-                    Button("Upload Image", 260, 
-                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False,allowed_extensions = ["png", "jpg", "jpeg"]),"blue"
-                           ),
                     self.btn_callback_files,
                     self.btn_callback_folder,
-                    Button("Save Ouput Image", 260,
+                    Button("Upload Image", 240, 
+                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False,allowed_extensions = ["png", "jpg", "jpeg"]),"blue"
+                           ),
+                    Button("Save Ouput Image", 240,
                            lambda __: self.btn_callback_folder.get_directory_path(),"blue"
                            ),
+                    Button("Clean", 150,lambda __: self.clean_directory(),"red"),
                 ]
             )
         )
@@ -293,10 +295,24 @@ class Filters(UserControl):
         return self.container
     '''
     #TODO:
+    #NOTE: update the path to the tmp folder
+    '''
+    def clean_directory(self):
+        dir = './tmp'
+        skip_directory = 'err'
+        for root, dirs, files in os.walk(dir):
+                if skip_directory in dirs:
+                    dirs.remove(skip_directory) # skip the directory
+                for file in files:
+                    if file.endswith(".png"):
+                        os.remove(os.path.join(root, file))
+    '''
+    #TODO:
+    #NOTE: update the path to the tmp folder
     '''   
     def convert(self, array):
-        #dir = './tmp/filters'
-        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
+        dir = './tmp/filters'
+        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -408,11 +424,11 @@ class Filters(UserControl):
                           controls=[
                             Text("Increment/decrement light", size=12, weight="bold"),
                             AppCounter(),
-                            Text("Image with colored segmentation ?", size=12, weight="bold"),
+                            Text("Color inside segmentation", size=12, weight="bold"),
                             AppSizeMenu(),
-                            Text("Image with only the tumor ?", size=12, weight="bold"),
+                            Text("Get only the tumor", size=12, weight="bold"),
                             AppSizeMenu(),
-                            Text("Image without segmentation ?", size=12, weight="bold"),
+                            Text("Without segmentation", size=12, weight="bold"),
                             AppSizeMenu(),
                             Divider(height=0, color="transparent"),
                             AppButton(lambda e: self.generate_image(e)),
@@ -467,7 +483,7 @@ class Filters(UserControl):
             controls=[
                 self.filters_title(),
                 self.step_one(),
-                Text("Input file", size=16, weight="bold"),
+                Text("Input File", size=16, weight="bold"),
                 self.step_two(),
                 Text("Select Options", size=16, weight="bold"),
                 self.card(),

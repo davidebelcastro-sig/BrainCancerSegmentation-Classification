@@ -1,9 +1,8 @@
+import os
 from flet import *
 import shutil
 import cv2
 from datetime import datetime
-from PIL import Image as im
-from PIL import ImageDraw, ImageFont
 
 #NOTE: import the script that runs the brain tumor segmentation
 from src import run
@@ -72,8 +71,8 @@ class Segmentation(UserControl):
     #NOTE: update the path to the tmp folder
     '''
     def convert(self, array):
-        #dir = './tmp'
-        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'
+        dir = './tmp'
+        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -97,7 +96,7 @@ class Segmentation(UserControl):
             file_to_segment = self.session[0]
             final, probablita, area = run.main(file_to_segment)
             if probablita == 0 and area == 0:
-                path = self.draw_image()
+                path = './tmp/err/error_image.png'
                 view = controls_dict['After']
                 view.content = Column()
                 self.update()
@@ -132,25 +131,6 @@ class Segmentation(UserControl):
         )
     '''
     #TODO:
-    NOTE: update the path to the tmp folder
-    '''
-    def draw_image(self):
-        img_width = 380
-        img_height = 380
-        img = im.new('RGB', (img_width, img_height), color='black')
-        draw = ImageDraw.Draw(img)
-        text = "Oops! Tumor not found"
-        font = ImageFont.truetype('/Users/lucian/Documents/GitHub/BrainCancerSegmentation/src/gui/arial.ttf', size=30)  # You can choose any font you like and set the size of the text
-        text_bbox = draw.textbbox((0, 0), text, font=font)
-        text_width, text_height = text_bbox[2] - text_bbox[0], text_bbox[3] - text_bbox[1]
-        x, y = (img.width - text_width) // 2, (img.height - text_height) // 2
-        draw.text((x, y), text, fill='white', font=font)
-        #path = './tmp/error_image.png
-        path = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/error_image.png'
-        img.save(path)
-        return path
-    '''
-    #TODO:
     '''
     def error_msg(self, type, msg):
         if type == 'Error':
@@ -171,6 +151,19 @@ class Segmentation(UserControl):
             ]
         )
         return self.column
+    '''
+    #TODO:
+    #NOTE: update the path to the tmp folder
+    '''
+    def clean_directory(self):
+        dir = './tmp'
+        skip_directory = 'err'
+        for root, dirs, files in os.walk(dir):
+                if skip_directory in dirs:
+                    dirs.remove(skip_directory) # skip the directory
+                for file in files:
+                    if file.endswith(".png"):
+                        os.remove(os.path.join(root, file))
     '''
     Appends the stats text to the container that will be displayed
     '''
@@ -247,11 +240,12 @@ class Segmentation(UserControl):
                 alignment=MainAxisAlignment.CENTER,
                 vertical_alignment=CrossAxisAlignment.CENTER,
                 controls=[
-                    Button("Upload File", 260,lambda __: self.btn_callback_files.pick_files(allow_multiple=False, allowed_extensions = ["png", "jpg", "jpeg", "mat"]),"black"),
                     self.btn_callback_files,
                     self.btn_callback_folder,
-                    Button("Start Segmentation", 260,lambda __: self.start_segmentation(),"green"),
-                    Button("Save Output", 260,lambda __: self.btn_callback_folder.get_directory_path(),"black"),
+                    Button("Upload File", 160,lambda __: self.btn_callback_files.pick_files(allow_multiple=False, allowed_extensions = ["png", "jpg", "jpeg", "mat"]),"blue"),
+                    Button("Start Segmentation", 200,lambda __: self.start_segmentation(),"green"),
+                    Button("Save Output Image", 200,lambda __: self.btn_callback_folder.get_directory_path(),"blue"),
+                    Button("Clean", 150,lambda __: self.clean_directory(),"red"),
                 ]
             )
         ) 
@@ -306,11 +300,11 @@ class Segmentation(UserControl):
             controls=[
                 self.segmentation_title(),
                 self.step_one(),
-                Text("Input file", size=16, weight="bold"),
+                Text("Input File", size=16, weight="bold"),
                 self.step_two(),
                 Text("Before and After", size=16, weight="bold"),
                 Row(controls=[self.step_three("Before"),self.step_three("After")]),
-                Text("Some stats for you", size=16, weight="bold"),
+                Text("Stats", size=16, weight="bold"),
                 Row(controls=[self.step_four("probabilita"),self.step_four("area")]),
                 Divider(height=50, color="transparent"),
             ]
