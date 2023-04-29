@@ -1,5 +1,5 @@
 ## Brain Cancer Segmentation 
-> Thesis project for the BSc in Computer Science at La Sapienza University of Rome. 
+> Computer Vision project for the BSc in Computer Science at La Sapienza University of Rome. 
 
 ### Requirements 
 Dependecies used for the Segmentation:
