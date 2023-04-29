@@ -1,7 +1,7 @@
 # Brain Cancer Segmentation 
 > Computer Vision project for the course "AI Lab: Computer Vision and NLP (2022/2023)" at La Sapienza University of Rome. This project is part of the thesis "Brain Tumor Segmentation and Classification using Deep Learning" by Davide Belcastro.
 
-TODO - Add a short video showcasing the project.
+https://user-images.githubusercontent.com/32139751/235325224-0c578cff-b594-4bff-a8f3-2afa922e5cfd.mov
 
 ## Requirements 
 Dependecies used for the Segmentation:
