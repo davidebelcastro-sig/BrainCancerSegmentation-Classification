@@ -6,8 +6,7 @@ from src.gui.segmentation import Segmentation
 from src.gui.filters import Filters
 
 '''
-Main function for the application, 
-this is where the page is created and the main function is called.
+Main function for the application, this is where the page is created.
 '''
 def main(page: ft.Page):
     #NOTE: Page configuration

@@ -2,10 +2,11 @@ from flet import *
 import shutil
 import cv2
 from datetime import datetime
+from PIL import Image as im
+from PIL import ImageDraw, ImageFont
 
 #NOTE: import the script that runs the brain tumor segmentation
 from src import run
-
 controls_dict = {}
 save = []
 
@@ -71,8 +72,8 @@ class Segmentation(UserControl):
     #NOTE: update the path to the tmp folder
     '''
     def convert(self, array):
-        dir = './tmp'
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'
+        #dir = './tmp'
+        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -83,23 +84,41 @@ class Segmentation(UserControl):
     Starts the segmentation process of the image after the user has selected the image and clicked on the button
     '''
     def start_segmentation(self):
-        file_to_segment = self.session[0]
-        final, probablita, area = run.main(file_to_segment)
-        path = self.convert(final) 
-        view = controls_dict['After']
-        view_probabilita = controls_dict['probabilita']
-        view_area = controls_dict['area']
-        view_area.content = Column()
-        view_probabilita.content = Column()
-        view.content = Column()
-        self.update()
-        view.content.controls.append(self.append_image(path))
-        view_probabilita.content.controls.append(self.return_stats("bar_chart", "Probabilità Tumore ", str(probablita)))
-        view_area.content.controls.append(self.return_stats("bar_chart", "Area Tumore ", str(area*100)))
-        save.append(path)
-        view.content.update() 
-        view_probabilita.content.update()
-        view_area.content.update()
+        if len(self.session) == 0:
+            control = controls_dict['files']
+            control.content = Column(
+                scroll='auto',
+                expand=True,
+            )
+            self.update()
+            control.content.controls.append(self.error_msg("Error", "Please upload a file"))
+            control.content.update()
+        else:
+            file_to_segment = self.session[0]
+            final, probablita, area = run.main(file_to_segment)
+            if probablita == 0 and area == 0:
+                path = self.draw_image()
+                view = controls_dict['After']
+                view.content = Column()
+                self.update()
+                view.content.controls.append(self.append_image(path))
+                view.content.update()
+            else:
+                path = self.convert(final) 
+                view = controls_dict['After']
+                view_probabilita = controls_dict['probabilita']
+                view_area = controls_dict['area']
+                view_area.content = Column()
+                view_probabilita.content = Column()
+                view.content = Column()
+                self.update()
+                view.content.controls.append(self.append_image(path))
+                view_probabilita.content.controls.append(self.return_stats("bar_chart", "Probabilità Tumore ", str(probablita)))
+                view_area.content.controls.append(self.return_stats("bar_chart", "Area Tumore ", str(area*100)))
+                save.append(path)
+                view.content.update() 
+                view_probabilita.content.update()
+                view_area.content.update()
     '''
     Appends the file to the file list
     '''
@@ -111,6 +130,47 @@ class Segmentation(UserControl):
                 Row(controls=[Text(file_path, size=9,no_wrap=False, color="white54"),])
             ]
         )
+    '''
+    #TODO:
+    NOTE: update the path to the tmp folder
+    '''
+    def draw_image(self):
+        img_width = 380
+        img_height = 380
+        img = im.new('RGB', (img_width, img_height), color='black')
+        draw = ImageDraw.Draw(img)
+        text = "Oops! Tumor not found"
+        font = ImageFont.truetype('/Users/lucian/Documents/GitHub/BrainCancerSegmentation/src/gui/arial.ttf', size=30)  # You can choose any font you like and set the size of the text
+        text_bbox = draw.textbbox((0, 0), text, font=font)
+        text_width, text_height = text_bbox[2] - text_bbox[0], text_bbox[3] - text_bbox[1]
+        x, y = (img.width - text_width) // 2, (img.height - text_height) // 2
+        draw.text((x, y), text, fill='white', font=font)
+        #path = './tmp/error_image.png
+        path = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/error_image.png'
+        img.save(path)
+        return path
+    '''
+    #TODO:
+    '''
+    def error_msg(self, type, msg):
+        if type == 'Error':
+            icon = icons.ERROR_OUTLINE
+            text = 'Error message'
+            col = "red"
+        elif type == 'Success':
+            icon = icons.CHECK_CIRCLE_OUTLINE
+            text = 'Success message'
+            col = "green"
+        else:
+            print('Something went wrong')
+        self.column = Column(
+            spacing=1,
+            controls=[
+                Row(controls=[Icon(icon, size=12),Text(text, size=13, color=col)]),
+                Row(controls=[Text(msg, size=9,no_wrap=False, color="white54"),])
+            ]
+        )
+        return self.column
     '''
     Appends the stats text to the container that will be displayed
     '''
@@ -128,7 +188,6 @@ class Segmentation(UserControl):
     Appends the image to the container that will be displayed
     '''
     def append_image(self, file_path):
-        #check = file_path[-3:]
         if file_path.endswith('mat'):
             path = run.load_image_nii(file_path)
         else:
@@ -256,3 +315,4 @@ class Segmentation(UserControl):
                 Divider(height=50, color="transparent"),
             ]
         )
+    

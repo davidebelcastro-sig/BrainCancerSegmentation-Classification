@@ -1,3 +1,4 @@
+import shutil
 from flet import *
 import cv2
 from datetime import datetime
@@ -10,7 +11,7 @@ controls_dict = {}
 data = []
 image=[]
 history = []
-
+save = []
 '''
 #TODO:
 '''
@@ -156,7 +157,7 @@ class AppButton(UserControl):
                 content=Row(
                     alignment=MainAxisAlignment.CENTER,
                     controls=[
-                        Text("Generate new image", size=13, weight="bold"),
+                        Text("Generate Image", size=13, weight="bold"),
                     ]
                 ),
                 style=ButtonStyle(
@@ -173,7 +174,7 @@ class Filters(UserControl):
     '''
     def __init__(self):
         self.btn_callback_files = FilePicker(on_result=self.segmentation_files)
-        self.btn_callback_folder = FilePicker(on_result=None)
+        self.btn_callback_folder = FilePicker(on_result=self.segmentation_folder)
         self.session = []
         super().__init__()
     '''
@@ -265,12 +266,12 @@ class Filters(UserControl):
                 vertical_alignment=CrossAxisAlignment.CENTER,
                 controls=[
                     Button("Upload Image", 260, 
-                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False,allowed_extensions = ["png", "jpg", "jpeg"]),"black"
+                           lambda __: self.btn_callback_files.pick_files(allow_multiple=False,allowed_extensions = ["png", "jpg", "jpeg"]),"blue"
                            ),
                     self.btn_callback_files,
-                    #self.btn_callback_folder,
-                    Button("Save New Image", 260,
-                           lambda __: self.btn_callback_folder.get_directory_path(),"black"
+                    self.btn_callback_folder,
+                    Button("Save Ouput Image", 260,
+                           lambda __: self.btn_callback_folder.get_directory_path(),"blue"
                            ),
                 ]
             )
@@ -294,8 +295,8 @@ class Filters(UserControl):
     #TODO:
     '''   
     def convert(self, array):
-        dir = './tmp/filters'
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
+        #dir = './tmp/filters'
+        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -324,36 +325,69 @@ class Filters(UserControl):
                             if checks.content.value == True:
                                 ans = str(item.controls[0].value)
                                 c.append(ans)
-        result = main(c, self.session[-1])
-        if type(result) == str:
-            control = controls_dict['error']
+        if len(self.session) == 0:
+            control = controls_dict['files']
             control.content = Column(
-                scroll='auto',  
+                scroll='auto',
                 expand=True,
             )
             self.update()
-            control.content.controls.append(self.error_msg("Error", result))
+            control.content.controls.append(self.error_msg("Error", "Please upload an image"))
             control.content.update()
         else:
-            path = self.convert(result)
-            image[-1].controls.append(
-                Container(
-                    width=400,
-                    height=400,
-                    image_src=path,
-                    image_fit='cover',
-                    border_radius=8,)
-            )
-            image[-1].update()
-            history.append(path)
-            control = controls_dict['error']
-            control.content = Column(
-                scroll='auto',  
-                expand=True,
-            )
-            self.update()
-            control.content.controls.append(self.error_msg("Success", "Congratulations, your image has been generated!"))
-            control.content.update()
+            result = main(c, self.session[-1])
+            if type(result) == str:
+                control = controls_dict['error']
+                control.content = Column(
+                    scroll='auto',  
+                    expand=True,
+                )
+                self.update()
+                control.content.controls.append(self.error_msg("Error", result))
+                control.content.update()
+            else:
+                path = self.convert(result)
+                image[-1].controls.append(
+                    Container(
+                        width=400,
+                        height=400,
+                        image_src=path,
+                        image_fit='cover',
+                        border_radius=8,)
+                )
+                image[-1].update()
+                history.append(path)
+                control = controls_dict['error']
+                control.content = Column(
+                    scroll='auto',  
+                    expand=True,
+                )
+                self.update()
+                control.content.controls.append(self.error_msg("Success", "Congratulations, your image has been generated!"))
+                control.content.update()
+                save.append(path) 
+    '''
+    Saves the output image in a selected folder
+    '''
+    def segmentation_folder(self, e: FilePickerResultEvent):
+        if e.path:
+            try:
+                path = save[-1]
+                now = datetime.now()
+                file_name = now.strftime("%H_%M_%S")
+                t = f"{file_name}.png"
+                dir = e.path + "/" + t
+                shutil.copy(path, dir)
+                control = controls_dict['error']
+                control.content = Column(
+                    scroll='auto',
+                    expand=True,
+                )
+                self.update()
+                control.content.controls.append(self.error_msg("Success", "Congratulations, your image has been saved at the selected location : " + dir))
+                control.content.update()
+            except Exception as e:
+                print("Failed to save file")
     '''
     #TODO:
     '''

@@ -100,8 +100,7 @@ def main(data,path):
     contorno = get_contourn(cv2.imread(path))
     processed = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2GRAY)
     if len(data) == 0 or len(data) == 1 or len(data) == 2 or len(data) == 3:
-        #TODO:
-        result = "Error: missing data"
+        result = "You have to select an option for each filter"
         return result
     elif data[0] != '0':
         check = int(data[0])
@@ -118,15 +117,13 @@ def main(data,path):
             result = leva_contorno(result,contorno)
             return result
         elif data[1] == 'Yes':
-            #TODO:
-            result ='Non puoi selezionare la colorazione in questa combinazione di filtri'
+            result = 'You can not select the coloration in this combination of filters'
             return result
         elif data[2] == 'Yes' and data[3] == 'Yes':
-            #TODO:
-            result = "Non puoi selezionare il tumore soltanto e l immagine senza contorno"
+            result = 'You can not select only the tumor and the image without contour'
             return result
         else:
-            #TODO:
+            result = 'Something went wrong, check the logs'
             return result
     elif data[0] == '0' and data[1] == 'Yes' and data[2] == 'Yes' and data[3] == 'No':
         result = color_contourn(cv2.imread(path),contorno)
@@ -142,6 +139,5 @@ def main(data,path):
         result = leva_contorno(processed,contorno)
         return result
     else:
-        #TODO:
-        result = ""
+        result = "Something went wrong, check logs"
         return result
