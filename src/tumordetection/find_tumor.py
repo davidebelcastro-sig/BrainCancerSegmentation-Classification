@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 '''
-#TODO:
+return the probability that an area is a tumor
 '''
 def get_probability_of_tumor(area,circularity,colore_tumore,colore_cervello,area_esterna):
     if circularity >= 0.90 and area <= area_esterna*0.20  and abs(colore_tumore-colore_cervello) >= 10:
@@ -19,8 +19,10 @@ def get_probability_of_tumor(area,circularity,colore_tumore,colore_cervello,area
         return 0.50
     else:
         return 0.30
+    
+
 '''
-#TODO:
+return an value that represent the priority of a tumor
 '''
 def get_media_pesata(tup,color_tumor,area_contorno_esterno,colore_cervello):
     media = tup[1]  
@@ -86,8 +88,11 @@ def get_media_pesata(tup,color_tumor,area_contorno_esterno,colore_cervello):
     prio4 = prio4*20
     media_prio = (prio1+prio2+prio3+prio4)/120
     return media_prio
+
+
+
 '''
-#TODO:
+return the tumor with your priority
 '''
 def get_tumor(color_tumor,brain,segm,mylist,area_contorno_esterno,colore_cervello):
     lista_contorni = []

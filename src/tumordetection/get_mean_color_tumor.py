@@ -3,14 +3,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
+
+
 '''
-#TODO:
+#convert the image in a numpy array
 '''
 def convertInNpArray(img):
     data = np.float32(img.reshape((-1, 1)))
     return data
+
+
 '''
-#TODO:
+#find the best value of k using the elbow method
 '''
 def findK(data,num_range):
     point = {}
@@ -31,8 +35,11 @@ def findK(data,num_range):
             k = difference.index(el) + 1 
             break
     return k, inertias, ks
+
+
+
 '''
-#TODO:
+this function is used to segment the image using K-Means Clustering.
 '''
 def KMeansClustering(data, k,img):
     kmeans = KMeans(n_clusters=k, random_state=0)
@@ -41,15 +48,19 @@ def KMeansClustering(data, k,img):
     segmented_data = np.uint8(kmeans.cluster_centers_[labels])
     segmented_img = segmented_data.reshape(img.shape)
     return segmented_img
+
+
 '''
-#TODO:
+show the image
 '''
 def showImage(img):
     cv2.imshow("Segmented Image", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
 '''
-#TODO:
+show the elbow method
 '''
 def showElbowMethod(ks,inertias):
     plt.plot(ks, inertias, '-o')
@@ -59,16 +70,20 @@ def showElbowMethod(ks,inertias):
     plt.xticks(ks)
     plt.axis('on')
     plt.show()
+
+
 '''
-#TODO:
+call the function KMeansClustering
 '''
 def kmean(img):
     iterations = 20  
     data = convertInNpArray(img)
     segmented_img = KMeansClustering(data, 6, img)  
     return segmented_img,6
+
+
 '''
-#TODO:
+return the value of the priority of the tumor
 '''
 def get_priority(tup,colore_cervello,area_contorno_esterno):
     colore_tumore = tup[0]
@@ -132,8 +147,9 @@ def get_priority(tup,colore_cervello,area_contorno_esterno):
     prio4 = prio4*20
     media_prio = (prio1+prio2+prio3+prio4)/120
     return media_prio
+
 '''
-#TODO:
+return the mean color of the tumor
 '''
 def get_color(img,colore_cervello,area_contorno_esterno):
         img = cv2.GaussianBlur(img, (5, 5), 0)

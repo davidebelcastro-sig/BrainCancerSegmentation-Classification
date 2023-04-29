@@ -1,8 +1,10 @@
 import cv2
 import numpy as np
 
+
+
 '''
-#TODO:
+return the contour of the tumor
 '''
 def get_contourn(immagine_segmentata):
     for x in range(len(immagine_segmentata)):
@@ -22,8 +24,10 @@ def get_contourn(immagine_segmentata):
     contours, hierarchy = cv2.findContours(immagine_segmentata,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)
     return contours[0]
+
+
 '''
-#TODO:
+increase or decrease the light of the tumor
 '''
 def modify_light_contorno(immagine_iniziale,contorno,percentuale,segno):
     copia = immagine_iniziale.copy()
@@ -43,16 +47,20 @@ def modify_light_contorno(immagine_iniziale,contorno,percentuale,segno):
         for pixel in lista_pixel:
             immagine_iniziale[pixel[0]][pixel[1]] = max(immagine_iniziale[pixel[0]][pixel[1]] - (immagine_iniziale[pixel[0]][pixel[1]]*percentuale)/100,0)
     return immagine_iniziale
+
+
 '''
-#TODO:
+return only the tumor
 '''
 def get_only_contorno(immagine_iniziale,contorno):
     mask = np.zeros(immagine_iniziale.shape[:2], np.uint8)
     cv2.drawContours(mask, [contorno], -1, 255, -1)
     result = cv2.bitwise_and(immagine_iniziale, immagine_iniziale, mask=mask)
     return result
+
+
 '''
-#TODO:
+#return the color of the pixel next to the contour
 '''
 def get_colore(img,x,y):
     i = 0
@@ -71,8 +79,10 @@ def get_colore(img,x,y):
                     return min(cl_sx,cl_dx)
         except:
             pass
+
+
 '''
-#TODO:
+#return the image without the contour
 '''
 def leva_contorno(immagine_iniziale,contorno):
     for x in range(len(immagine_iniziale)):
@@ -84,8 +94,10 @@ def leva_contorno(immagine_iniziale,contorno):
             except:
                 pass
     return immagine_iniziale
+
+
 '''
-#TODO:
+#return the image with the contour colored
 '''
 def color_contourn(immagine_iniziale,contorno):
     im_copy = immagine_iniziale.copy()
@@ -93,6 +105,8 @@ def color_contourn(immagine_iniziale,contorno):
     im = cv2.addWeighted(im_copy, 0.4, immagine_iniziale, 1 - 0.2, 0)
     im = cv2.drawContours(im, [contorno], -1, (0, 0, 255), 0)
     return im
+
+
 '''
 Main entry point for the filter script
 '''

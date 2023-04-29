@@ -14,7 +14,7 @@ from src.tumordetection import find_tumor
 warnings.filterwarnings("ignore")
 
 '''
-#TODO:
+return the countour of the tumor on brain without border
 '''
 def get_contourn_external(brain):
     j = brain.copy()
@@ -26,8 +26,11 @@ def get_contourn_external(brain):
     countour = max(contours, key=cv2.contourArea)
     area_contorno_esterno = cv2.contourArea(countour)
     return area_contorno_esterno
+
+
+
 '''
-#TODO:
+return the countour of the tumor on brain with border
 '''
 def get_contourn_external_withBord(brain):
     j = brain.copy()
@@ -41,8 +44,11 @@ def get_contourn_external_withBord(brain):
     countour = max(contours, key=cv2.contourArea)
     area_contorno_esterno = cv2.contourArea(countour)
     return area_contorno_esterno
+
+
+
 '''
-#TODO:
+return the perimeter of the tumor
 '''
 def get_perimetro_external(brain):
     j = brain.copy()
@@ -54,9 +60,10 @@ def get_perimetro_external(brain):
     countour = max(contours, key=cv2.contourArea)
     perimetro_contorno_esterno = cv2.arcLength(countour,True)
     return perimetro_contorno_esterno
+
+
 '''
-#TODO:
-#NOTE: update the path to the tmp folder
+load image from .mat file
 '''
 def load_image_nii(input):
     f = h5py.File(input, 'r')
@@ -71,13 +78,15 @@ def load_image_nii(input):
         elif el == 'tumorMask':
             border = f['cjdata'][el]
     dir = './tmp/input'
-    #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/input'
     now = datetime.now()
     file_name = now.strftime("%H:%M:%S")
     t = f"{file_name}.png"
     path = dir + "/" + t
     plt.imsave(path, image, cmap='gray')
     return path
+
+
+
 '''
 Main entry point for the brain cancer segmentation script
 '''

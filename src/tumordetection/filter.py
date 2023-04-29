@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 '''
-#TODO:
+    This function is used to find the tumor in the image.
 '''
 def find_tumor(color_tumor,color_brain,brain,vetto,segm,mylist):
     my_interesed = []
