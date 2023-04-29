@@ -66,13 +66,14 @@ class Segmentation(UserControl):
                 shutil.copy(path, dir)
             except Exception as e:
                 print("Failed to save file")
+
+                
     '''
     Saves the image in the tmp folder
     #NOTE: update the path to the tmp folder
     '''
     def convert(self, array):
         dir = './tmp'
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
