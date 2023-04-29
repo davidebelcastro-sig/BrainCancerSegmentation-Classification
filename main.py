@@ -5,6 +5,7 @@ from flet import *
 from src.gui.segmentation import Segmentation
 from src.gui.filters import Filters
 
+
 '''
 Main function for the application, this is where the page is created.
 '''
@@ -15,6 +16,8 @@ def main(page: ft.Page):
     page.window_height = 910
     page.padding = 25
     page.bgcolor = colors.BLACK
+    
+    
     '''
     Change the tab when the user clicks on the navigation bar
     '''
@@ -37,6 +40,8 @@ def main(page: ft.Page):
     tab_1 = seg
     tab_2 = fil
     page.add(Container(content=Column([tab_1,tab_2])))
+    
+    
 '''
 Main entry point for the application,
 this is where the page is created and the main function is called.

@@ -1,14 +1,16 @@
 import os
 import matplotlib.pyplot as plt
 import h5py
-from src.skull_stripping import get_brain
-from strong_skull_stripping import strong_skull
+from ..src.skullstripping.skull_stripping import get_brain
+from ..src.skullstripping.strong_skull_stripping import strong_skull
+from ..src.tumordetection import get_mean_color_tumor
 import csv
-import get_mean_color_tumor
 import cv2
 
 
-
+'''
+return the color of the brain
+'''
 def get_contourn_external(brain):
     j = brain.copy()
     for i in range(0,brain.shape[0]):
@@ -25,6 +27,9 @@ def get_contourn_external(brain):
     return area_contorno_esterno
 
 
+'''
+test color with file mat
+'''
 def test_nii(path):
     cont = 0
     totale = 0

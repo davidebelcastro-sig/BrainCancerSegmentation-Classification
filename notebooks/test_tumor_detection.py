@@ -1,24 +1,28 @@
 import cv2
 import numpy as np
-from skullstripping import get_random_image
 from skimage.metrics import structural_similarity 
-
-from skullstripping import skull_stripping
-from skullstripping import strong_skull_stripping
-from tumordetection import get_mean_color_tumor
-from tumordetection import find_tumor
+from ..src.skullstripping.skull_stripping import get_brain
+from ..src.skullstripping.strong_skull_stripping import strong_skull
+from ..src.tumordetection import get_mean_color_tumor
+from ..src.tumordetection  import find_tumor
 import h5py
 import matplotlib.pyplot as plt
 import os
 import csv
 
 
+
+'''
+return the difference between two images
+'''
 def confronta_img(img1,img2):
    (p,d) = structural_similarity(img1, img2, full=True) #p è la percentuale di somiglianza, d è la matrice di differenza
    return p
 
 
-
+'''
+return the countourn of the brain with border
+'''
 def get_contourn_external_withBord(brain):
     j = brain.copy()
     j[j == 255]  = 0 
@@ -36,7 +40,9 @@ def get_contourn_external_withBord(brain):
     return area_contorno_esterno
 
 
-
+'''
+return the countorn of the brain without border
+'''
 def get_contourn_external(brain):
     j = brain.copy()
     for i in range(0,brain.shape[0]):
@@ -52,6 +58,10 @@ def get_contourn_external(brain):
     area_contorno_esterno = cv2.contourArea(countour)
     return area_contorno_esterno
 
+
+'''
+return the perimeter of the brain
+'''
 def get_perimetro_external(brain):
     j = brain.copy()
     for i in range(0,brain.shape[0]):
@@ -68,6 +78,9 @@ def get_perimetro_external(brain):
     return perimetro_contorno_esterno
 
 
+'''
+start the test
+'''
 def run(percorso):
     totali = 0
     ok = 0
@@ -123,7 +136,7 @@ def run(percorso):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         only_tumor = cv2.bitwise_and(img, bord)  #prendo solo il tumore,sfondo nero
         path = 'brain.png'
-        tupla_return = skull_stripping.get_brain(path)
+        tupla_return = get_brain(path)
         brain = tupla_return[1]
         value = tupla_return[0]
         indice_medio = tupla_return[2]
@@ -134,7 +147,7 @@ def run(percorso):
 
         if value == -1:
             print("FIRST SKULL STRIPPING FAILED:   try with strong skull stripping")
-            tupla_return = strong_skull_stripping.strong_skull(brain)
+            tupla_return = strong_skull(brain)
             brain = tupla_return[1]
             value = tupla_return[0]
             indice_medio = tupla_return[2]

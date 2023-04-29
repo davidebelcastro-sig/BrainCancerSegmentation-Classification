@@ -1,15 +1,17 @@
 import os
 import matplotlib.pyplot as plt
 import h5py
-from skull_stripping import get_brain
-from strong_skull_stripping import strong_skull
+from ..src.skullstripping.skull_stripping import get_brain
+from ..src.skullstripping.strong_skull_stripping import strong_skull
 import csv
 import cv2
 import numpy as np
 
 
 
-
+'''
+test color with file mat
+'''
 def test_nii(path,numb):
     totali = 0
     ok = 0
@@ -52,7 +54,9 @@ def test_nii(path,numb):
         writer.writerow([path, str(ok), str(maggiore), str(errata), str(perc_ok) + "%", str(perc_maggiore) + "%", str(perc_errata) + "%", str(totali)])
 
 
-
+'''
+test color with file jpg
+'''
 def test_jpg(path):
     totali = 0
     ok = 0
@@ -93,4 +97,3 @@ if __name__ == '__main__':
     path = input("Inserisci il path del dataset: ")
     numb = input("Inserire numero cartella:")
     test_nii(path,numb)
-    #test_jpg("../dataset_jpg/Testing/glioma_tumor")
