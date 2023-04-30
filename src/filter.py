@@ -30,6 +30,7 @@ def get_contourn(immagine_segmentata):
 increase or decrease the light of the tumor
 '''
 def modify_light_contorno(immagine_iniziale,contorno,percentuale,segno):
+    percentuale = abs(percentuale)
     copia = immagine_iniziale.copy()
     lista_pixel = []
     cv2.drawContours(copia, [contorno], -1, 255, -1)
