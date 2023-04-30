@@ -25,7 +25,6 @@ pip3 install -r requirements.txt
 
 The first dataset was downloaded from Kaggle, download it [here](https://www.kaggle.com/datasets/sartajbhuvaji/brain-tumor-classification-mri).
 This contains 3264 files so divided, there are two directories: "Testing" and "Training", each directory contains other 4 directories: glioma, pituitary, meningioma, no-tumor.
-
 The format of the images is ".jpg".
 
 
