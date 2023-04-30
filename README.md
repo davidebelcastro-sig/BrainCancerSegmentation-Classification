@@ -24,8 +24,10 @@ pip3 install -r requirements.txt
 
 
 The first dataset was downloaded from Kaggle, download it [here](https://www.kaggle.com/datasets/sartajbhuvaji/brain-tumor-classification-mri).
-This contains 3264 files so divided, there are two directories: "Testing" and "training", each directory contains other 4 directories: glioma, pituitary, meningioma, no-tumor.
-The format of the images is ".jpg"
+This contains 3264 files so divided, there are two directories: "Testing" and "Training", each directory contains other 4 directories: glioma, pituitary, meningioma, no-tumor.
+The format of the images is ".jpg".
+
+
 The second dataset was downloaded from Figshare, download it [here](https://figshare.com/articles/dataset/brain_tumor_dataset/1512427).
 This directory contains 3064 contrast-enhanced T1-MRI performed on 233 patients with 3 different tumor types: meningioma (708), glioma (1426), and pituitary tumor (930).
 
