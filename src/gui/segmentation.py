@@ -113,8 +113,8 @@ class Segmentation(UserControl):
                 view.content = Column()
                 self.update()
                 view.content.controls.append(self.append_image(path))
-                view_probabilita.content.controls.append(self.return_stats("bar_chart", "Probabilità Tumore ", str(probablita)))
-                view_area.content.controls.append(self.return_stats("bar_chart", "Area Tumore ", str(area*100)))
+                view_probabilita.content.controls.append(self.return_stats("bar_chart", "Tumor Probability", str(probablita)))
+                view_area.content.controls.append(self.return_stats("bar_chart", "Tumor Area ", str(area*100)))
                 save.append(path)
                 view.content.update() 
                 view_probabilita.content.update()
@@ -310,4 +310,3 @@ class Segmentation(UserControl):
                 Divider(height=50, color="transparent"),
             ]
         )
-    
