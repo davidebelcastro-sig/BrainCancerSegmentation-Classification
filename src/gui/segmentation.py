@@ -66,8 +66,6 @@ class Segmentation(UserControl):
                 shutil.copy(path, dir)
             except Exception as e:
                 print("Failed to save file")
-
-                
     '''
     Saves the image in the tmp folder
     #NOTE: update the path to the tmp folder
@@ -131,7 +129,7 @@ class Segmentation(UserControl):
             ]
         )
     '''
-    #TODO:
+    Returns the error msg
     '''
     def error_msg(self, type, msg):
         if type == 'Error':
@@ -143,7 +141,7 @@ class Segmentation(UserControl):
             text = 'Success message'
             col = "green"
         else:
-            print('Something went wrong')
+            pass
         self.column = Column(
             spacing=1,
             controls=[
@@ -153,7 +151,7 @@ class Segmentation(UserControl):
         )
         return self.column
     '''
-    #TODO:
+    Cleans the tmp directory of the png files generated 
     #NOTE: update the path to the tmp folder
     '''
     def clean_directory(self):

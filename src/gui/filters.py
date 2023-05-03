@@ -14,30 +14,30 @@ image=[]
 history = []
 save = []
 '''
-#TODO:
+Class for the counter segment 
 '''
 class AppCounter(UserControl):
     '''
-    #TODO:
+    Initialize the class
     '''
     def __init__(self):
         super().__init__()
     '''
-    #TODO:
+    Add values to the app counter
     ''' 
     def app_counter_add(self, e):
         count = int(self.app_counter_text.value) + 10
         self.app_counter_text.value = str(count)
         self.app_counter_text.update()
     '''
-    #TODO:
+    Decrement values from the app counter
     '''
     def app_counter_sub(self, e):
         count = int(self.app_counter_text.value) - 10
         self.app_counter_text.value = str(count)
         self.app_counter_text.update()
     '''
-    #TODO:
+    Builds the counter segment
     '''
     def build(self):
         self.app_counter_text=Text("0", size=12, color='black')
@@ -65,16 +65,16 @@ class AppCounter(UserControl):
             ),
         )
 '''
-#TODO:
+Class for the Menu segment
 '''
 class AppSizeMenu(UserControl):
     '''
-    #TODO:
+    Initialize the class
     '''
     def __init__(self):
         super().__init__()
     '''
-    #TODO:
+    Change the box based on the box selected by the user
     '''
     def change_box(self, e):
         for check in self.controls[0].content.controls[:]:
@@ -85,7 +85,7 @@ class AppSizeMenu(UserControl):
             e.control.update()
         pass
     '''
-    #TODO:
+    Returns the Container for the segment
     '''
     def app_size_container(self):
         return Container(
@@ -101,7 +101,7 @@ class AppSizeMenu(UserControl):
             ),
         )
     '''
-    #TODO:
+    Returns the Column for the segment
     '''
     def app_size_main_builder(self, size:str):
         return Column(
@@ -118,7 +118,7 @@ class AppSizeMenu(UserControl):
             ]
         )
     '''
-    #TODO:
+    Builds the menu segment
     '''
     def build(self):
         return Container(
@@ -135,17 +135,17 @@ class AppSizeMenu(UserControl):
             )
         )
 '''
-#TODO:
+Class for the button
 '''
 class AppButton(UserControl):
     '''
-    #TODO:
+    Initialize the class
     '''
     def __init__(self, function):
         self.function = function
         super().__init__()
     '''
-    #TODO:
+    Builds the button
     '''
     def build(self):
         return Container(
@@ -167,11 +167,11 @@ class AppButton(UserControl):
             ),
         )
 '''
-#TODO:
+Class for the filters
 '''
 class Filters(UserControl):
     '''
-    #TODO:
+    Initialize the class with the file pickers and the session list
     '''
     def __init__(self):
         self.btn_callback_files = FilePicker(on_result=self.segmentation_files)
@@ -179,7 +179,7 @@ class Filters(UserControl):
         self.session = []
         super().__init__()
     '''
-    #TODO:
+    Returns the title for the page
     '''   
     def filters_title(self):
         return Container(
@@ -199,7 +199,7 @@ class Filters(UserControl):
             )
         )
     '''
-    #TODO:
+    Returns the file list for the container 
     '''   
     def return_file_list(self, file_icon, file_name, file_path):
         return Column(
@@ -210,7 +210,7 @@ class Filters(UserControl):
             ]
         )
     '''
-    #TODO:
+    Returns the file selected by the user
     '''   
     def segmentation_files(self, e: FilePickerResultEvent):
         self.session=[]
@@ -232,7 +232,7 @@ class Filters(UserControl):
         else:
             pass
     '''
-    #TODO:
+    Returns the error message 
     '''   
     def error_msg(self, type, msg):
         if type == 'Error':
@@ -244,7 +244,7 @@ class Filters(UserControl):
             text = 'Success message'
             col = "green"
         else:
-            print('Something went wrong')
+            pass
         self.column = Column(
             spacing=1,
             controls=[
@@ -254,7 +254,8 @@ class Filters(UserControl):
         )
         return self.column
     '''
-    #TODO:
+    Returns the buttons that can be selected by the user 
+    to upload  files, start segmentation etc..
     '''   
     def step_one(self):
         return Container(
@@ -279,7 +280,7 @@ class Filters(UserControl):
             )
         )
     '''
-    #TODO:
+    returns the container that shows the file selected
     '''   
     def step_two(self):
         self.container = Container(
@@ -294,7 +295,7 @@ class Filters(UserControl):
 
         return self.container
     '''
-    #TODO:
+    Cleans the tmp directory of the png files generated
     #NOTE: update the path to the tmp folder
     '''
     def clean_directory(self):
@@ -307,7 +308,8 @@ class Filters(UserControl):
                     if file.endswith(".png"):
                         os.remove(os.path.join(root, file))
     '''
-    #TODO:
+    Converts the image returned by the  script
+    to  a png file
     #NOTE: update the path to the tmp folder
     '''   
     def convert(self, array):
@@ -319,7 +321,8 @@ class Filters(UserControl):
         cv2.imwrite(path, array)
         return path
     '''
-    #TODO:
+    Generates the output image by calling
+    the filters script and running it
     '''  
     def generate_image(self, e):
         stuff = data[-1]
@@ -404,7 +407,8 @@ class Filters(UserControl):
             except Exception as e:
                 print("Failed to save file")
     '''
-    #TODO:
+    Returns the card that contains
+    the filters selection and output image
     '''
     def card(self):
         self.container = Container(
@@ -457,7 +461,8 @@ class Filters(UserControl):
         image.append(p)
         return self.container
     '''
-    #TODO:
+    Returns the error container that contains
+    the error/success message
     '''
     def error(self):
         self.container = Container(
@@ -472,7 +477,7 @@ class Filters(UserControl):
 
         return self.container
     '''
-    #TODO:
+    Builds the filters view 
     '''
     def build(self):
         self.column = Column(
