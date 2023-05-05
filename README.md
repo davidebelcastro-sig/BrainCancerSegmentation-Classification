@@ -14,7 +14,17 @@ Dependecies used for the Segmentation:
 Dependecies used for the GUI:
 - [flet](https://pypi.org/project/flet/)
 
-You can use the requirements.txt file to install this dependencies with pip:
+Activate a virtual environment:
+```
+python3 -m venv env
+``` 
+
+Before you can start installing packages in your virtual environment you'll need to activate it:
+``` 
+source env/bin/activate
+``` 
+
+You can use the requirements.txt file to install packages with pip:
 ``` 
 pip3 install -r requirements.txt
 ```
