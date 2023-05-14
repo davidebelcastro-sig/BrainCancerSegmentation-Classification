@@ -1,8 +1,6 @@
 import cv2
 import numpy as np
 
-
-
 '''
 return the contour of the tumor
 '''

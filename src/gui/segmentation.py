@@ -71,7 +71,8 @@ class Segmentation(UserControl):
     #NOTE: update the path to the tmp folder
     '''
     def convert(self, array):
-        dir = './tmp'
+        dir = "./tmp"
+        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'        
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -95,12 +96,21 @@ class Segmentation(UserControl):
             file_to_segment = self.session[0]
             final, probablita, area = run.main(file_to_segment)
             if probablita == 0 and area == 0:
-                path = './tmp/err/error_image.png'
+                path = "./tmp/err/error_image.png"
+                #path = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/err/error_image.png'
                 view = controls_dict['After']
+                view_probabilita = controls_dict['probabilita']
+                view_area = controls_dict['area']
+                view_area.content = Column()
+                view_probabilita.content = Column()
                 view.content = Column()
                 self.update()
+                view_area.content.controls.append(self.return_stats("bar_chart", "Tumor Area", "Tumor not found"))
+                view_probabilita.content.controls.append(self.return_stats("bar_chart", "Tumor Probability", "Tumor not found"))
                 view.content.controls.append(self.append_image(path))
                 view.content.update()
+                view_probabilita.content.update()
+                view_area.content.update()
             else:
                 path = self.convert(final) 
                 view = controls_dict['After']
@@ -111,10 +121,10 @@ class Segmentation(UserControl):
                 view.content = Column()
                 self.update()
                 view.content.controls.append(self.append_image(path))
-                view_probabilita.content.controls.append(self.return_stats("bar_chart", "Tumor Probability", str(probablita)))
-                view_area.content.controls.append(self.return_stats("bar_chart", "Tumor Area ", str(area*100)))
+                view_probabilita.content.controls.append(self.return_stats("bar_chart", "Tumor Probability", str(probablita)+"%"))
+                view_area.content.controls.append(self.return_stats("bar_chart", "Tumor Area ", str(area*100)+"%"))
                 save.append(path)
-                view.content.update() 
+                view.content.update()
                 view_probabilita.content.update()
                 view_area.content.update()
     '''
@@ -155,19 +165,20 @@ class Segmentation(UserControl):
     #NOTE: update the path to the tmp folder
     '''
     def clean_directory(self):
-        dir = './tmp'
-        skip_directory = 'err'
-        for root, dirs, files in os.walk(dir):
-                if skip_directory in dirs:
-                    dirs.remove(skip_directory) # skip the directory
-                for file in files:
-                    if file.endswith(".png"):
+        dir = "./tmp"
+        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp' 
+        skip_directory = 'err' 
+        for root, dirs, files in os.walk(dir): 
+            if skip_directory in dirs:
+                    dirs.remove(skip_directory) # skip the directory 
+            for file in files:
+                if file.endswith(".png"):
                         os.remove(os.path.join(root, file))
     '''
     Appends the stats text to the container that will be displayed
     '''
     def return_stats(self, icon, name, value):
-        value = value + "%"
+        value = value
         self.column = Column(
             spacing=1,
             controls=[

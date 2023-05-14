@@ -299,7 +299,8 @@ class Filters(UserControl):
     #NOTE: update the path to the tmp folder
     '''
     def clean_directory(self):
-        dir = './tmp'
+        dir = "./tmp"
+        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'
         skip_directory = 'err'
         for root, dirs, files in os.walk(dir):
                 if skip_directory in dirs:
@@ -313,7 +314,8 @@ class Filters(UserControl):
     #NOTE: update the path to the tmp folder
     '''   
     def convert(self, array):
-        dir = './tmp/filters'
+        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
+        dir = "./tmp/filters"
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
