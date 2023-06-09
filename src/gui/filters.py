@@ -50,14 +50,14 @@ class AppCounter(UserControl):
                 controls=[
                     IconButton(
                         icon=icons.ADD_ROUNDED,
-                        icon_size=15,
+                        icon_size=17,
                         icon_color="black",
                         on_click=lambda e: self.app_counter_add(e),
                     ),
                     self.app_counter_text,
                     IconButton(
                         icon=icons.REMOVE_ROUNDED,
-                        icon_size=15,
+                        icon_size=17,
                         icon_color="black",
                         on_click=lambda e: self.app_counter_sub(e)
                     ),
@@ -110,7 +110,7 @@ class AppSizeMenu(UserControl):
             controls=[
                 Text(
                     value=size,
-                    size=9,
+                    size=10,
                     color="black",
                     weight="bold",
                 ),
@@ -158,7 +158,7 @@ class AppButton(UserControl):
                 content=Row(
                     alignment=MainAxisAlignment.CENTER,
                     controls=[
-                        Text("Generate Image", size=13, weight="bold"),
+                        Text("Generate Image", size=15, weight="bold"),
                     ]
                 ),
                 style=ButtonStyle(
@@ -215,7 +215,7 @@ class Filters(UserControl):
     def segmentation_files(self, e: FilePickerResultEvent):
         self.session=[]
         if e.files:
-            control = controls_dict['files']
+            control = controls_dict['error']
             control.content = Column(
                 scroll='auto',
                 expand=True,
@@ -224,8 +224,7 @@ class Filters(UserControl):
             for file in e.files:
                 self.session.append(file.path)
                 control.content.controls.append(
-                    self.return_file_list(
-                        icons.FILE_COPY_ROUNDED, file.name, file.path
+                    self.error_msg('File', file.name, file.path
                     )
                 )
                 control.content.update()
@@ -234,7 +233,7 @@ class Filters(UserControl):
     '''
     Returns the error message 
     '''   
-    def error_msg(self, type, msg):
+    def error_msg(self, type, msg, file_name):
         if type == 'Error':
             icon = icons.ERROR_OUTLINE
             text = 'Error message'
@@ -243,15 +242,26 @@ class Filters(UserControl):
             icon = icons.CHECK_CIRCLE_OUTLINE
             text = 'Success message'
             col = "green"
+        elif type == 'File':
+            icon = icons.FILE_COPY_ROUNDED
         else:
             pass
-        self.column = Column(
+        if type == 'File':
+            self.column = Column(
             spacing=1,
             controls=[
-                Row(controls=[Icon(icon, size=12),Text(text, size=13, color=col)]),
-                Row(controls=[Text(msg, size=9,no_wrap=False, color="white54"),])
+                Row(controls=[Icon(icon, size=12),Text(msg, size=13),]),
+                Row(controls=[Text(file_name, size=9,no_wrap=False, color="white54"),])
             ]
-        )
+            )
+        else:
+            self.column = Column(
+                spacing=1,
+                controls=[
+                    Row(controls=[Icon(icon, size=12),Text(text, size=13, color=col)]),
+                    Row(controls=[Text(msg, size=9,no_wrap=False, color="white54"),])
+                ]
+            )
         return self.column
     '''
     Returns the buttons that can be selected by the user 
@@ -299,8 +309,8 @@ class Filters(UserControl):
     #NOTE: update the path to the tmp folder
     '''
     def clean_directory(self):
-        dir = "./tmp"
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'
+        #dir = "./tmp"
+        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'
         skip_directory = 'err'
         for root, dirs, files in os.walk(dir):
                 if skip_directory in dirs:
@@ -314,8 +324,8 @@ class Filters(UserControl):
     #NOTE: update the path to the tmp folder
     '''   
     def convert(self, array):
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
-        dir = "./tmp/filters"
+        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
+        #dir = "./tmp/filters"
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -352,7 +362,7 @@ class Filters(UserControl):
                 expand=True,
             )
             self.update()
-            control.content.controls.append(self.error_msg("Error", "Please upload an image"))
+            control.content.controls.append(self.error_msg("Error", "Please upload an image", ""),)
             control.content.update()
         else:
             result = main(c, self.session[-1])
@@ -363,7 +373,7 @@ class Filters(UserControl):
                     expand=True,
                 )
                 self.update()
-                control.content.controls.append(self.error_msg("Error", result))
+                control.content.controls.append(self.error_msg("Error", result, ""))
                 control.content.update()
             else:
                 path = self.convert(result)
@@ -383,7 +393,7 @@ class Filters(UserControl):
                     expand=True,
                 )
                 self.update()
-                control.content.controls.append(self.error_msg("Success", "Congratulations, your image has been generated!"))
+                control.content.controls.append(self.error_msg("Success", "Congratulations, your image has been generated!", ""))
                 control.content.update()
                 save.append(path) 
     '''
@@ -414,7 +424,7 @@ class Filters(UserControl):
     '''
     def card(self):
         self.container = Container(
-            height=400,
+            height=455,
             border=border.all(0.8, "white24"),
             border_radius=6,
             padding=10,
@@ -427,15 +437,15 @@ class Filters(UserControl):
                         #height=400,
                         content=Column(
                           controls=[
-                            Text("Increment/decrement light", size=12, weight="bold"),
+                            Text("Increment/decrement light", size=14, weight="bold"),
                             AppCounter(),
-                            Text("Color inside segmentation", size=12, weight="bold"),
+                            Text("Color inside segmentation", size=14, weight="bold"),
                             AppSizeMenu(),
-                            Text("Get only the tumor", size=12, weight="bold"),
+                            Text("Get only the tumor", size=14, weight="bold"),
                             AppSizeMenu(),
-                            Text("Without segmentation", size=12, weight="bold"),
+                            Text("Without segmentation", size=14, weight="bold"),
                             AppSizeMenu(),
-                            Divider(height=0, color="transparent"),
+                            Divider(height=10, color="transparent"),
                             AppButton(lambda e: self.generate_image(e)),
                           ]  
                         ),
@@ -489,10 +499,11 @@ class Filters(UserControl):
             controls=[
                 self.filters_title(),
                 self.step_one(),
-                Text("Input File", size=16, weight="bold"),
-                self.step_two(),
+                #Text("Input File", size=16, weight="bold"),
+                #self.step_two(),
                 Text("Select Options", size=16, weight="bold"),
                 self.card(),
+                Text("Logs", size=16, weight="bold"),
                 self.error(),
             ]
         )

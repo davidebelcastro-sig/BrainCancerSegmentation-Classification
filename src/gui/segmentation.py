@@ -71,8 +71,8 @@ class Segmentation(UserControl):
     #NOTE: update the path to the tmp folder
     '''
     def convert(self, array):
-        dir = "./tmp"
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'        
+        #dir = "./tmp"
+        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'        
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -93,14 +93,27 @@ class Segmentation(UserControl):
             control.content.controls.append(self.error_msg("Error", "Please upload a file"))
             control.content.update()
         else:
+            control = controls_dict['files']
+            control.content = Column(
+                scroll='auto',
+                expand=True,
+            )
+            self.update()
+            control.content.controls.append(self.error_msg("Success", "Segmentation process has started"))
+            control.content.update()
             file_to_segment = self.session[0]
             final, probablita, area = run.main(file_to_segment)
             if probablita == 0 and area == 0:
-                path = "./tmp/err/error_image.png"
-                #path = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/err/error_image.png'
+                #path = "./tmp/err/error_image.png"
+                path = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/err/error_image.png'
                 view = controls_dict['After']
                 view_probabilita = controls_dict['probabilita']
                 view_area = controls_dict['area']
+                control = controls_dict['files']
+                control.content = Column(
+                    scroll='auto',
+                    expand=True,
+                )
                 view_area.content = Column()
                 view_probabilita.content = Column()
                 view.content = Column()
@@ -108,11 +121,18 @@ class Segmentation(UserControl):
                 view_area.content.controls.append(self.return_stats("bar_chart", "Tumor Area", "Tumor not found"))
                 view_probabilita.content.controls.append(self.return_stats("bar_chart", "Tumor Probability", "Tumor not found"))
                 view.content.controls.append(self.append_image(path))
+                control.content.controls.append(self.error_msg("Error", "Tumor not found"))
+                control.content.update()
                 view.content.update()
                 view_probabilita.content.update()
                 view_area.content.update()
             else:
                 path = self.convert(final) 
+                control = controls_dict['files']
+                control.content = Column(
+                    scroll='auto',
+                    expand=True,
+                )
                 view = controls_dict['After']
                 view_probabilita = controls_dict['probabilita']
                 view_area = controls_dict['area']
@@ -123,6 +143,8 @@ class Segmentation(UserControl):
                 view.content.controls.append(self.append_image(path))
                 view_probabilita.content.controls.append(self.return_stats("bar_chart", "Tumor Probability", str(probablita)+"%"))
                 view_area.content.controls.append(self.return_stats("bar_chart", "Tumor Area ", str(area*100)+"%"))
+                control.content.controls.append(self.error_msg("Success", "Tumor found"))
+                control.content.update()
                 save.append(path)
                 view.content.update()
                 view_probabilita.content.update()
@@ -165,8 +187,8 @@ class Segmentation(UserControl):
     #NOTE: update the path to the tmp folder
     '''
     def clean_directory(self):
-        dir = "./tmp"
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp' 
+        #dir = "./tmp"
+        dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp' 
         skip_directory = 'err' 
         for root, dirs, files in os.walk(dir): 
             if skip_directory in dirs:
@@ -310,12 +332,13 @@ class Segmentation(UserControl):
             controls=[
                 self.segmentation_title(),
                 self.step_one(),
-                Text("Input File", size=16, weight="bold"),
-                self.step_two(),
+    
                 Text("Before and After", size=16, weight="bold"),
                 Row(controls=[self.step_three("Before"),self.step_three("After")]),
                 Text("Stats", size=16, weight="bold"),
                 Row(controls=[self.step_four("probabilita"),self.step_four("area")]),
+                Text("Logs", size=16, weight="bold"),
+                self.step_two(),
                 Divider(height=50, color="transparent"),
             ]
         )
