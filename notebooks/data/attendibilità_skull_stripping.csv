@@ -1,6 +1,0 @@
-Dir,Giuste numero,Maggiori numero,Errate numero,Giuste percentuale,Maggiori percentuale,Errate percentuale,Totale
-../dataset_nii/dataset/brainTumorDataPublic_767-1532,734,22,10,95.822454308094%,2.8720626631853787%,1.3054830287206265%,766
-../dataset_nii/dataset/brainTumorDataPublic_1533-2298,714,28,24,93.21148825065274%,3.6553524804177546%,3.1331592689295036%,766
-../dataset_nii/dataset/brainTumorDataPublic_1-766,679,72,15,88.64229765013056%,9.39947780678851%,1.95822454308094%,766
-../dataset_nii/dataset/brainTumorDataPublic_2299-3064,687,55,24,89.68668407310705%,7.180156657963447%,3.1331592689295036%,766
-Totali,2814,177,73,91.84%,"5,77%","2,38%",3064

@@ -28,7 +28,7 @@ def main(page: ft.Page):
         selected_index=0,
         on_change=changetab,
         destinations=[
-            ft.NavigationDestination(icon=ft.icons.ADD_A_PHOTO, label="Segmentation"),
+            ft.NavigationDestination(icon=ft.icons.ADD_A_PHOTO, label="Segmentation&Classification"),
             ft.NavigationDestination(icon=ft.icons.SETTINGS,label="Filters"),
         ]
     )
