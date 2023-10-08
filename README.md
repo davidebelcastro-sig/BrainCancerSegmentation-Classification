@@ -1,12 +1,10 @@
-# Brain Cancer Segmentation and Classification
-> This is my thesis and the title is "Brain Tumor Segmentation and Classification".
-To implement the project I used openCV,scikit learn,tensor flow and other similar functions.
-I used machine learning and artificial intelligence techniques.
+# Brain Cancer Segmentation 
+> Computer Vision project for the course "AI Lab: Computer Vision and NLP (2022/2023)" at La Sapienza University of Rome. This project is part of the thesis "Brain Tumor Segmentation and Classification using Deep Learning" by Davide Belcastro.
 
 https://user-images.githubusercontent.com/32139751/235325224-0c578cff-b594-4bff-a8f3-2afa922e5cfd.mov
 
 ## Requirements 
-Dependecies used for the Segmentation and Classification:
+Dependecies used for the Segmentation:
 - [cv2](https://pypi.org/project/opencv-python/)
 - [sklearn](https://pypi.org/project/scikit-learn/)
 - [numpy](https://pypi.org/project/numpy/)
@@ -59,16 +57,14 @@ Install the requirements and run the main.py file or run the .sh file.
 ```
 ./run.sh
 ``` 
-### Brain tumor segmentation and classification
+### Brain tumor segmentation
 GUI will open and you can select the image you want to segment (by clicking on the "Upload File" button) and then click on the "Start Segment" button to start the segmentation process. 
 
 Once the segmentation is done, the GUI will show the original image (on the left) adn the segmented image (on the right). You can also see some stats about the segmentation process in the 2 columns under the images, the probability of the image to a Tumor and the area of the tumor (both in percentage).
 
-The tumor found is classified into:glioma/meningioma/pituitary.
-
 Some documentation about what the buttons do:
 - **Upload File**: Upload the image you want to segment. You can choose either a .mat file or an image file (.jpg, .png, .jpeg).
-- **Start**: Start the segmentation and classification process (You need to upload a file first).
+- **Start Segment**: Start the segmentation process (You need to upload a file first).
 - **Save Output Image**: Save the output image from the segmentation process in a selected directory.
 - **Clean**: Clean the directory that stores all the images (use it only if you want to delete all the images in the directory).
 
@@ -105,5 +101,5 @@ Some documentation about what the buttons do:
 > This project is licensed under the terms of the MIT license. See [LICENSE](LICENSE) for more details.
 
 ## Credits
-- Brain Cancer Segmentation and Classification developed by [Davide Belcastro](https://github.com/davidebelcastro-sig).
+- Brain Cancer Segmentation developed by [Davide Belcastro](https://github.com/davidebelcastro-sig).
 - GUI developed by [Lucian D. Crainic](https://github.com/LucianCrainic).

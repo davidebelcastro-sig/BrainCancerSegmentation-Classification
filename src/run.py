@@ -10,9 +10,6 @@ from src.skullstripping import skull_stripping
 from src.skullstripping import strong_skull_stripping
 from src.tumordetection import get_mean_color_tumor
 from src.tumordetection import find_tumor
-from src.tumorclassification import getTumorFeatures
-from src.tumorclassification import getType
-
 
 warnings.filterwarnings("ignore")
 
@@ -100,7 +97,6 @@ def main(image):
     else:
         path = image
     tupla_return = skull_stripping.get_brain(path)
-    original_image = cv2.imread(path)
     brain = tupla_return[1]
     value = tupla_return[0]
     indice_medio = tupla_return[2]
@@ -158,13 +154,11 @@ def main(image):
             maschera = cv2.cvtColor(maschera, cv2.COLOR_BGR2GRAY)
             cv2.drawContours(maschera, [contorno], -1, 255, -1)
             copia = cv2.cvtColor(copia, cv2.COLOR_BGR2GRAY)
-            my_tumor = cv2.bitwise_and(copia, maschera)    
-            features = getTumorFeatures.calculate_characteristics(contorno,original_image)
-            tumor_type = getType.get_tumor_type(features)
-            return img, probabilita, area_relativa,tumor_type
+            my_tumor = cv2.bitwise_and(copia, maschera) 
+            return img, probabilita, area_relativa
         except:
             #NOTE: Tumor not found
-            return copia, 0, 0, 0
+            return copia, 0, 0
 
     else:
         #NOTE: Error in skull stripping
@@ -194,10 +188,8 @@ def main(image):
             maschera  = np.zeros(img.shape, np.uint8)
             cv2.drawContours(img, [contorno], -1, (0, 255, 0), 3)
             area = cv2.contourArea(contorno)
-            area_relativa = area/area_contorno_esterno   
-            features = getTumorFeatures.calculate_features(contorno,original_image)
-            tumor_type = getType.get_tumor_type(features)
-            return img, probabilita, area_relativa,tumor_type
+            area_relativa = area/area_contorno_esterno
+            return img, probabilita, area_relativa
         except:
             #NOTE: Tumor not found
-            return copia, 0, 0, 0
+            return copia, 0, 0
