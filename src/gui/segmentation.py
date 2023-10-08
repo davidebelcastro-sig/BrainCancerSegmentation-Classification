@@ -71,8 +71,7 @@ class Segmentation(UserControl):
     #NOTE: update the path to the tmp folder
     '''
     def convert(self, array):
-        dir = "./tmp"
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'        
+        dir = "./tmp"   
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -83,6 +82,7 @@ class Segmentation(UserControl):
     Starts the segmentation process of the image after the user has selected the image and clicked on the button
     '''
     def start_segmentation(self):
+    	
         if len(self.session) == 0:
             control = controls_dict['files']
             control.content = Column(
@@ -93,40 +93,52 @@ class Segmentation(UserControl):
             control.content.controls.append(self.error_msg("Error", "Please upload a file"))
             control.content.update()
         else:
+            print("Starting process")
             file_to_segment = self.session[0]
-            final, probablita, area = run.main(file_to_segment)
+            final, probablita, area,tumor_type = run.main(file_to_segment)
             if probablita == 0 and area == 0:
                 path = "./tmp/err/error_image.png"
-                #path = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/err/error_image.png'
                 view = controls_dict['After']
                 view_probabilita = controls_dict['probabilita']
                 view_area = controls_dict['area']
                 view_area.content = Column()
                 view_probabilita.content = Column()
+                view_type = controls_dict['tumor_type']
+                view_type.content = Column()
                 view.content = Column()
+
                 self.update()
                 view_area.content.controls.append(self.return_stats("bar_chart", "Tumor Area", "Tumor not found"))
                 view_probabilita.content.controls.append(self.return_stats("bar_chart", "Tumor Probability", "Tumor not found"))
+                view_type.content.controls.append(self.return_stats("bar_chart", "Tumor Type", "Tumor not found"))
                 view.content.controls.append(self.append_image(path))
                 view.content.update()
                 view_probabilita.content.update()
                 view_area.content.update()
+                view_type.content.update()
             else:
+                #print("Tumor type: ", tumor_type)
                 path = self.convert(final) 
                 view = controls_dict['After']
                 view_probabilita = controls_dict['probabilita']
                 view_area = controls_dict['area']
                 view_area.content = Column()
                 view_probabilita.content = Column()
+                view_type = controls_dict['tumor_type']
+                view_type.content = Column()
                 view.content = Column()
                 self.update()
                 view.content.controls.append(self.append_image(path))
                 view_probabilita.content.controls.append(self.return_stats("bar_chart", "Tumor Probability", str(probablita)+"%"))
                 view_area.content.controls.append(self.return_stats("bar_chart", "Tumor Area ", str(area*100)+"%"))
+                view_type.content.controls.append(self.return_stats("bar_chart", "Tumor Type", tumor_type))
                 save.append(path)
                 view.content.update()
                 view_probabilita.content.update()
                 view_area.content.update()
+                view_type.content.update()
+
+        
     '''
     Appends the file to the file list
     '''
@@ -166,7 +178,6 @@ class Segmentation(UserControl):
     '''
     def clean_directory(self):
         dir = "./tmp"
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp' 
         skip_directory = 'err' 
         for root, dirs, files in os.walk(dir): 
             if skip_directory in dirs:
@@ -232,7 +243,7 @@ class Segmentation(UserControl):
                 expand=True,
                 alignment=MainAxisAlignment.SPACE_BETWEEN,
                 controls=[
-                    Text("Brain Tumor Segmentation", size=18, weight="bold"),
+                    Text("Brain Tumor Segmentation and Classification", size=18, weight="bold"),
                     IconButton(content=Text("x",weight="bold",size=18),on_click=lambda __: self.page.window_close())
                 ]
             )
@@ -253,7 +264,7 @@ class Segmentation(UserControl):
                     self.btn_callback_files,
                     self.btn_callback_folder,
                     Button("Upload File", 160,lambda __: self.btn_callback_files.pick_files(allow_multiple=False, allowed_extensions = ["png", "jpg", "jpeg", "mat"]),"blue"),
-                    Button("Start Segmentation", 200,lambda __: self.start_segmentation(),"green"),
+                    Button("Start", 200,lambda __: self.start_segmentation(),"green"),
                     Button("Save Output Image", 200,lambda __: self.btn_callback_folder.get_directory_path(),"blue"),
                     Button("Clean", 150,lambda __: self.clean_directory(),"red"),
                 ]
@@ -299,6 +310,10 @@ class Segmentation(UserControl):
         )
         controls_dict[title] = self.container
         return self.container
+    
+
+
+    
     '''
     Main entry point for the view, builds the UI and returns the root control.
     '''
@@ -316,6 +331,8 @@ class Segmentation(UserControl):
                 Row(controls=[self.step_three("Before"),self.step_three("After")]),
                 Text("Stats", size=16, weight="bold"),
                 Row(controls=[self.step_four("probabilita"),self.step_four("area")]),
+                Text("Type", size=16, weight="bold"),
+                Row(controls=[self.step_four("tumor_type"),]),
                 Divider(height=50, color="transparent"),
             ]
         )
