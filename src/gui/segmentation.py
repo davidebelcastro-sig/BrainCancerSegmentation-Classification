@@ -9,23 +9,19 @@ from src import run
 controls_dict = {}
 save = []
 
-'''
-This class is used to create the buttons that will be used in the application.
-'''
 class Button(UserControl):
-    '''
-    Initiliaze the button with the parameters
-    '''
+    """This class is used to create the buttons that will be used in the application."""
+
     def __init__(self, btn_name, btn_width, btn_function, btn_color):
+        """Initiliaze the button with the parameters."""
         self.btn_name = btn_name
         self.btn_width = btn_width
         self.btn_function = btn_function
         self.btn_color = btn_color
         super().__init__()
-    '''
-    Builds the button with the parameters passed in the constructor
-    '''
+ 
     def build(self):
+        """Builds the button with the parameters passed in the constructor."""
         return ElevatedButton(
             on_click=self.btn_function,
             content=Row(
@@ -40,22 +36,19 @@ class Button(UserControl):
             height=48,
             width=self.btn_width,
         )
-'''
-This class is used to create the Segmentation page.
-'''
+
 class Segmentation(UserControl):
-    '''
-    Initialize the file and folder picker buttons and the session list
-    '''
+    """This class is used to create the Segmentation page."""
+
     def __init__(self):
+        """Initialize the file and folder picker buttons and the session list."""
         self.btn_callback_files = FilePicker(on_result=self.segmentation_files)
         self.btn_callback_folder = FilePicker(on_result=self.segmentation_folder)
         self.session = []
         super().__init__()
-    '''
-    Saves the output image in a selected folder
-    '''
+  
     def segmentation_folder(self, e: FilePickerResultEvent):
+        """Saves the output image in a selected folder."""
         if e.path:
             try:
                 path = save[-1]
@@ -66,23 +59,21 @@ class Segmentation(UserControl):
                 shutil.copy(path, dir)
             except Exception as e:
                 print("Failed to save file")
-    '''
-    Saves the image in the tmp folder
-    #NOTE: update the path to the tmp folder
-    '''
+
+    #NOTE: update path
     def convert(self, array):
-        dir = "./tmp"   
+        """Saves the image in the tmp folder."""
+        #dir = "./tmp"   
+        dir = "/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp"
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
         path = dir + "/" + t
         cv2.imwrite(path, array)
         return path
-    '''
-    Starts the segmentation process of the image after the user has selected the image and clicked on the button
-    '''
+
     def start_segmentation(self):
-    	
+        """Starts the segmentation process of the image after the user has selected the image and clicked on the button."""
         if len(self.session) == 0:
             control = controls_dict['files']
             control.content = Column(
@@ -95,7 +86,7 @@ class Segmentation(UserControl):
         else:
             print("Starting process")
             file_to_segment = self.session[0]
-            final, probablita, area,tumor_type = run.main(file_to_segment)
+            final, probablita, area, tumor_type = run.main(file_to_segment)
             if probablita == 0 and area == 0:
                 path = "./tmp/err/error_image.png"
                 view = controls_dict['After']
@@ -117,7 +108,6 @@ class Segmentation(UserControl):
                 view_area.content.update()
                 view_type.content.update()
             else:
-                #print("Tumor type: ", tumor_type)
                 path = self.convert(final) 
                 view = controls_dict['After']
                 view_probabilita = controls_dict['probabilita']
@@ -138,11 +128,8 @@ class Segmentation(UserControl):
                 view_area.content.update()
                 view_type.content.update()
 
-        
-    '''
-    Appends the file to the file list
-    '''
     def return_file_list(self, file_icon, file_name, file_path):
+        """Appends the file to the file list."""
         return Column(
             spacing=1,
             controls=[
@@ -150,10 +137,9 @@ class Segmentation(UserControl):
                 Row(controls=[Text(file_path, size=9,no_wrap=False, color="white54"),])
             ]
         )
-    '''
-    Returns the error msg
-    '''
+
     def error_msg(self, type, msg):
+        """Returns the error msg."""
         if type == 'Error':
             icon = icons.ERROR_OUTLINE
             text = 'Error message'
@@ -172,12 +158,12 @@ class Segmentation(UserControl):
             ]
         )
         return self.column
-    '''
-    Cleans the tmp directory of the png files generated 
-    #NOTE: update the path to the tmp folder
-    '''
+    
+    #NOTE: update path
     def clean_directory(self):
-        dir = "./tmp"
+        """Cleans the tmp directory of the png files generated."""
+        dir = "/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp"
+        #dir = "./tmp"
         skip_directory = 'err' 
         for root, dirs, files in os.walk(dir): 
             if skip_directory in dirs:
@@ -185,10 +171,9 @@ class Segmentation(UserControl):
             for file in files:
                 if file.endswith(".png"):
                         os.remove(os.path.join(root, file))
-    '''
-    Appends the stats text to the container that will be displayed
-    '''
+
     def return_stats(self, icon, name, value):
+        """Appends the stats text to the container that will be displayed.""" 
         value = value
         self.column = Column(
             spacing=1,
@@ -198,10 +183,9 @@ class Segmentation(UserControl):
             ]
         )
         return self.column
-    '''
-    Appends the image to the container that will be displayed
-    '''
+    
     def append_image(self, file_path):
+        """Appends the image to the container that will be displayed."""
         if file_path.endswith('mat'):
             path = run.load_image_nii(file_path)
         else:
@@ -212,10 +196,9 @@ class Segmentation(UserControl):
             controls=[Image(path, height=350, width=430, fit="contain")]
         )
         return self.column
-    '''
-    Adds images to the view and the file to the file list
-    '''
+
     def segmentation_files(self, e: FilePickerResultEvent):
+        """Adds images to the view and the file to the file list."""
         self.session=[]
         if e.files:
             control = controls_dict['files']
@@ -234,10 +217,9 @@ class Segmentation(UserControl):
         else:
             # do nothing =(
             pass
-    '''
-    Builds the title for the page
-    '''
+
     def segmentation_title(self):
+        """Builds the title for the page."""
         return Container(
             content=Row(
                 expand=True,
@@ -248,10 +230,9 @@ class Segmentation(UserControl):
                 ]
             )
         ) 
-    '''
-    Builds the buttons for UI
-    '''
+
     def step_one(self):
+        """Builds the buttons for UI."""
         return Container(
             height=80,
             border=border.all(0.8, "white24"),
@@ -266,14 +247,13 @@ class Segmentation(UserControl):
                     Button("Upload File", 160,lambda __: self.btn_callback_files.pick_files(allow_multiple=False, allowed_extensions = ["png", "jpg", "jpeg", "mat"]),"blue"),
                     Button("Start", 200,lambda __: self.start_segmentation(),"green"),
                     Button("Save Output Image", 200,lambda __: self.btn_callback_folder.get_directory_path(),"blue"),
-                    Button("Clean", 150,lambda __: self.clean_directory(),"red"),
+                    Button("Clean Directory", 150,lambda __: self.clean_directory(),"red"),
                 ]
             )
         ) 
-    '''
-    Builds the container for the file list
-    '''
+
     def step_two(self):
+        """Builds the container for the file list."""
         self.container = Container(
             height=60,
             border=border.all(0.8, "white24"),
@@ -283,10 +263,9 @@ class Segmentation(UserControl):
         )
         controls_dict["files"] = self.container
         return self.container
-    '''
-    Builds the container for the before and after images
-    '''
+
     def step_three(self, title):
+        """Builds the container for the before and after images."""
         self.title = title
         self.container = Container(
             height= 360,
@@ -296,13 +275,12 @@ class Segmentation(UserControl):
         )
         controls_dict[self.title] = self.container
         return self.container
-    '''
-    Builds the container for the stats of the segmentation
-    '''
+
     def step_four(self, title):
+        """Builds the container for the stats of the segmentation."""
         self.container = Container(
             height=60,
-            width=420,
+            width=275,
             border=border.all(0.8, "white24"),
             border_radius=6,
             padding=12,
@@ -311,13 +289,8 @@ class Segmentation(UserControl):
         controls_dict[title] = self.container
         return self.container
     
-
-
-    
-    '''
-    Main entry point for the view, builds the UI and returns the root control.
-    '''
     def build(self):
+        """Main entry point for the view, builds the UI and returns the root control."""
         return Column(
             expand=True,
             alignment=MainAxisAlignment.START,
@@ -329,10 +302,8 @@ class Segmentation(UserControl):
                 self.step_two(),
                 Text("Before and After", size=16, weight="bold"),
                 Row(controls=[self.step_three("Before"),self.step_three("After")]),
-                Text("Stats", size=16, weight="bold"),
-                Row(controls=[self.step_four("probabilita"),self.step_four("area")]),
-                Text("Type", size=16, weight="bold"),
-                Row(controls=[self.step_four("tumor_type"),]),
+                Text("Stats and Tumor Type", size=16, weight="bold"),
+                Row(controls=[self.step_four("probabilita"),self.step_four("area"), self.step_four("tumor_type")]),
                 Divider(height=50, color="transparent"),
             ]
         )

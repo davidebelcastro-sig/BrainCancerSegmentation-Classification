@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 import mahotas as mh
 
-
-
 def calculate_characteristics(contour, original_image):
     # Crea una maschera vuota
     mask = np.zeros(original_image.shape[:2], dtype=np.uint8)
@@ -57,7 +55,6 @@ def calculate_characteristics(contour, original_image):
 
     gray_tumor = cv2.cvtColor(tumor, cv2.COLOR_BGR2GRAY)
   
-
     # Calcola il rapporto delle frequenze spettrali
     fft = np.fft.fft2(gray_tumor)
     spectrum = np.abs(fft) ** 2
@@ -70,7 +67,6 @@ def calculate_characteristics(contour, original_image):
                          texture_features[0], texture_features[1], texture_features[2], texture_features[3], 
                          texture_features[4], texture_features[5], texture_features[6], texture_features[7], texture_features[8], 
                          texture_features[9], texture_features[10], texture_features[11], texture_features[12]]]
-
     return out
 
 def getTexture(image):
@@ -82,4 +78,3 @@ def getTexture(image):
     mean_texture_features = np.mean(texture_features, axis=0)
     #calcolo la media delle 13 features
     return mean_texture_features
-

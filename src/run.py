@@ -13,13 +13,10 @@ from src.tumordetection import find_tumor
 from src.tumorclassification import getTumorFeatures
 from src.tumorclassification import getType
 
-
 warnings.filterwarnings("ignore")
 
-'''
-return the countour of the tumor on brain without border
-'''
 def get_contourn_external(brain):
+    """Return the countour of the tumor on brain without border."""
     j = brain.copy()
     for i in range(0,brain.shape[0]):
         for y in range(0,brain.shape[1]):
@@ -30,12 +27,8 @@ def get_contourn_external(brain):
     area_contorno_esterno = cv2.contourArea(countour)
     return area_contorno_esterno
 
-
-
-'''
-return the countour of the tumor on brain with border
-'''
 def get_contourn_external_withBord(brain):
+    """Return the countour of the tumor on brain with border."""
     j = brain.copy()
     j[j == 255]  = 0 
     j[j <=7] = 0
@@ -48,12 +41,8 @@ def get_contourn_external_withBord(brain):
     area_contorno_esterno = cv2.contourArea(countour)
     return area_contorno_esterno
 
-
-
-'''
-return the perimeter of the tumor
-'''
 def get_perimetro_external(brain):
+    """Return the perimeter of the tumor."""
     j = brain.copy()
     for i in range(0,brain.shape[0]):
         for y in range(0,brain.shape[1]):
@@ -64,11 +53,9 @@ def get_perimetro_external(brain):
     perimetro_contorno_esterno = cv2.arcLength(countour,True)
     return perimetro_contorno_esterno
 
-
-'''
-load image from .mat file
-'''
+#NOTE: update path
 def load_image_nii(input):
+    """Load image from .mat file."""
     f = h5py.File(input, 'r')
     for el in f['cjdata']:
         if el == 'image':
@@ -80,8 +67,8 @@ def load_image_nii(input):
             label = str(label)
         elif el == 'tumorMask':
             border = f['cjdata'][el]
-    #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/input'
-    dir = "./tmp/input"
+    dir = '/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp/input'
+    #dir = "./tmp/input"
     now = datetime.now()
     file_name = now.strftime("%H:%M:%S")
     t = f"{file_name}.png"
@@ -89,12 +76,8 @@ def load_image_nii(input):
     plt.imsave(path, image, cmap='gray')
     return path
 
-
-
-'''
-Main entry point for the brain cancer segmentation script
-'''
 def main(image):
+    """Main entry point for the brain cancer segmentation script."""
     if image.endswith('.mat'):
         path = load_image_nii(image)
     else:

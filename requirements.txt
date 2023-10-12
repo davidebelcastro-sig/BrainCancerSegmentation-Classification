@@ -4,3 +4,4 @@ numpy
 matplotlib
 h5py
 flet
+mahotas

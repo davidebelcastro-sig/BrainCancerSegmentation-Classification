@@ -3,7 +3,8 @@ import shutil
 from flet import * 
 import cv2
 from datetime import datetime
-from flet import IconButton, Row, icons, Container, Text, MainAxisAlignment, UserControl 
+from flet import IconButton, Row, icons, Container, Text, MainAxisAlignment, UserControl
+ 
 #NOTE: import the button class and the script that runs the filters
 from src.gui.segmentation import Button
 from src.filter import main
