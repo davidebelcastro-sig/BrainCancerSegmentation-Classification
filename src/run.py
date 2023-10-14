@@ -67,8 +67,8 @@ def load_image_nii(input):
             label = str(label)
         elif el == 'tumorMask':
             border = f['cjdata'][el]
-    dir = '/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp/input'
-    #dir = "./tmp/input"
+    #dir = '/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp/input'
+    dir = "./tmp/input"
     now = datetime.now()
     file_name = now.strftime("%H:%M:%S")
     t = f"{file_name}.png"

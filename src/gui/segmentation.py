@@ -63,8 +63,8 @@ class Segmentation(UserControl):
     #NOTE: update path
     def convert(self, array):
         """Saves the image in the tmp folder."""
-        #dir = "./tmp"   
-        dir = "/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp"
+        dir = "./tmp"   
+        #dir = "/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp"
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
@@ -162,8 +162,8 @@ class Segmentation(UserControl):
     #NOTE: update path
     def clean_directory(self):
         """Cleans the tmp directory of the png files generated."""
-        dir = "/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp"
-        #dir = "./tmp"
+        #dir = "/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp"
+        dir = "./tmp"
         skip_directory = 'err' 
         for root, dirs, files in os.walk(dir): 
             if skip_directory in dirs:
