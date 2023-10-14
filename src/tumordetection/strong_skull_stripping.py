@@ -2,11 +2,8 @@ import cv2
 import numpy as np
 from sklearn.cluster import KMeans
 
-
-'''
-this function is used to segment the image using K-Means Clustering.
-'''
 def KMeansClustering(data, k,img):
+    """This function is used to segment the image using K-Means Clustering."""
     kmeans = KMeans(n_clusters=k, random_state=0)
     kmeans.fit(data)
     labels = kmeans.predict(data)
@@ -14,22 +11,15 @@ def KMeansClustering(data, k,img):
     segmented_img = segmented_data.reshape(img.shape)
     return segmented_img
 
-
-
-'''
-call the function KMeansClustering
-'''
 def kmean(img):
+    """Call the function KMeansClustering."""
     iterations = 20 
     data = np.float32(img.reshape((-1, 1)))
     segmented_img = KMeansClustering(data, 6, img)  
     return segmented_img,6
 
-
-'''
-return the contour of the brain
-'''
 def strong_skull(foto):
+    """Return the contour of the brain."""
     f = kmean(foto)
     imm  = f[0]
     massimo = -1

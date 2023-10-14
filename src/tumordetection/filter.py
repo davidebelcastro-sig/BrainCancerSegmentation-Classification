@@ -1,10 +1,8 @@
 import cv2
 import numpy as np
 
-'''
-    This function is used to find the tumor in the image.
-'''
 def find_tumor(color_tumor,color_brain,brain,vetto,segm,mylist):
+    """This function is used to find the tumor in the image."""
     my_interesed = []
     lista_riserva = []
     for value in mylist:

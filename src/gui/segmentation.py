@@ -3,6 +3,10 @@ from flet import *
 import shutil
 import cv2
 from datetime import datetime
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
 
 #NOTE: import the script that runs the brain tumor segmentation
 from src import run
@@ -63,12 +67,11 @@ class Segmentation(UserControl):
     #NOTE: update path
     def convert(self, array):
         """Saves the image in the tmp folder."""
-        dir = "./tmp"   
-        #dir = "/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp"
+        directory = settings.path_to_tmp  
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
-        path = dir + "/" + t
+        path = directory + "/" + t
         cv2.imwrite(path, array)
         return path
 
@@ -162,10 +165,9 @@ class Segmentation(UserControl):
     #NOTE: update path
     def clean_directory(self):
         """Cleans the tmp directory of the png files generated."""
-        #dir = "/Users/lucian/GitHub/BrainCancerSegmentation-Classification/tmp"
-        dir = "./tmp"
+        directory = settings.path_to_tmp
         skip_directory = 'err' 
-        for root, dirs, files in os.walk(dir): 
+        for root, dirs, files in os.walk(directory): 
             if skip_directory in dirs:
                     dirs.remove(skip_directory) # skip the directory 
             for file in files:

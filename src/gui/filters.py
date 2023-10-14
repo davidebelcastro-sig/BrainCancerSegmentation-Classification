@@ -8,39 +8,38 @@ from flet import IconButton, Row, icons, Container, Text, MainAxisAlignment, Use
 #NOTE: import the button class and the script that runs the filters
 from src.gui.segmentation import Button
 from src.filter import main
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
 
 controls_dict = {}
 data = []
 image=[]
 history = []
 save = []
-'''
-Class for the counter segment 
-'''
+
 class AppCounter(UserControl):
-    '''
-    Initialize the class
-    '''
+    """Class for the counter segment."""
+
     def __init__(self):
+        """Initialize the class."""
         super().__init__()
-    '''
-    Add values to the app counter
-    ''' 
+
     def app_counter_add(self, e):
+        """Add values to the app counter"""
         count = int(self.app_counter_text.value) + 10
         self.app_counter_text.value = str(count)
         self.app_counter_text.update()
-    '''
-    Decrement values from the app counter
-    '''
+
     def app_counter_sub(self, e):
+        """Decrement values from the app counter."""
         count = int(self.app_counter_text.value) - 10
         self.app_counter_text.value = str(count)
         self.app_counter_text.update()
-    '''
-    Builds the counter segment
-    '''
+
     def build(self):
+        """Builds the counter segment"""
         self.app_counter_text=Text("0", size=12, color='black')
         return Container(
             height=35,
@@ -65,19 +64,15 @@ class AppCounter(UserControl):
                 ],
             ),
         )
-'''
-Class for the Menu segment
-'''
+
 class AppSizeMenu(UserControl):
-    '''
-    Initialize the class
-    '''
+    """Class for the Menu segment."""
     def __init__(self):
+        """Initialize the class."""
         super().__init__()
-    '''
-    Change the box based on the box selected by the user
-    '''
+
     def change_box(self, e):
+        """Change the box based on the box selected by the user."""
         for check in self.controls[0].content.controls[:]:
             check.controls[1].content.value=False
             check.controls[1].content.update()
@@ -85,10 +80,9 @@ class AppSizeMenu(UserControl):
             e.control.value=True
             e.control.update()
         pass
-    '''
-    Returns the Container for the segment
-    '''
+
     def app_size_container(self):
+        """Returns the Container for the segment."""
         return Container(
             border_radius=30,
             width=25,
@@ -101,10 +95,9 @@ class AppSizeMenu(UserControl):
                 on_change=lambda e:self.change_box(e),
             ),
         )
-    '''
-    Returns the Column for the segment
-    '''
+
     def app_size_main_builder(self, size:str):
+        """Returns the Column for the segment."""
         return Column(
             horizontal_alignment=CrossAxisAlignment.CENTER,
             spacing=1,
@@ -118,10 +111,9 @@ class AppSizeMenu(UserControl):
                 self.app_size_container()
             ]
         )
-    '''
-    Builds the menu segment
-    '''
+
     def build(self):
+        """Builds the menu segment."""
         return Container(
             height=45,
             border_radius=6,
@@ -135,20 +127,16 @@ class AppSizeMenu(UserControl):
                 ],
             )
         )
-'''
-Class for the button
-'''
+
 class AppButton(UserControl):
-    '''
-    Initialize the class
-    '''
+    """Class for the button."""
     def __init__(self, function):
+        """Initialize the class."""
         self.function = function
         super().__init__()
-    '''
-    Builds the button
-    '''
+
     def build(self):
+        """Builds the button."""
         return Container(
             alignment=alignment.center,
             content=ElevatedButton(
@@ -167,22 +155,18 @@ class AppButton(UserControl):
                 ),
             ),
         )
-'''
-Class for the filters
-'''
+
 class Filters(UserControl):
-    '''
-    Initialize the class with the file pickers and the session list
-    '''
+    """Class for the filters."""
     def __init__(self):
+        """Initialize the class with the file pickers and the session list."""
         self.btn_callback_files = FilePicker(on_result=self.segmentation_files)
         self.btn_callback_folder = FilePicker(on_result=self.segmentation_folder)
         self.session = []
         super().__init__()
-    '''
-    Returns the title for the page
-    '''   
+
     def filters_title(self):
+        """Returns the title for the page."""
         return Container(
             content=Row(
                 expand=True,
@@ -199,10 +183,9 @@ class Filters(UserControl):
                 ]
             )
         )
-    '''
-    Returns the file list for the container 
-    '''   
+
     def return_file_list(self, file_icon, file_name, file_path):
+        """Returns the file list for the container."""
         return Column(
             spacing=1,
             controls=[
@@ -210,10 +193,9 @@ class Filters(UserControl):
                 Row(controls=[Text(file_path, size=9,no_wrap=False, color="white54"),])
             ]
         )
-    '''
-    Returns the file selected by the user
-    '''   
+
     def segmentation_files(self, e: FilePickerResultEvent):
+        """Returns the file selected by the user."""
         self.session=[]
         if e.files:
             control = controls_dict['files']
@@ -232,10 +214,9 @@ class Filters(UserControl):
                 control.content.update()
         else:
             pass
-    '''
-    Returns the error message 
-    '''   
+
     def error_msg(self, type, msg):
+        """Returns the error message."""
         if type == 'Error':
             icon = icons.ERROR_OUTLINE
             text = 'Error message'
@@ -254,11 +235,9 @@ class Filters(UserControl):
             ]
         )
         return self.column
-    '''
-    Returns the buttons that can be selected by the user 
-    to upload  files, start segmentation etc..
-    '''   
+
     def step_one(self):
+        """Returns the buttons that can be selected by the user to upload  files, start segmentation etc.."""
         return Container(
             height=80,
             border=border.all(0.8, "white24"),
@@ -280,10 +259,9 @@ class Filters(UserControl):
                 ]
             )
         )
-    '''
-    returns the container that shows the file selected
-    '''   
+  
     def step_two(self):
+        """Returns the container that shows the file selected."""
         self.container = Container(
             height=60,
             border=border.all(0.8, "white24"),
@@ -295,39 +273,32 @@ class Filters(UserControl):
         controls_dict["files"] = self.container
 
         return self.container
-    '''
-    Cleans the tmp directory of the png files generated
-    #NOTE: update the path to the tmp folder
-    '''
+
+    #NOTE: update path
     def clean_directory(self):
-        dir = "./tmp"
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp'
+        """Cleans the tmp directory of the png files generated."""
+        directory = settings.path_to_tmp
         skip_directory = 'err'
-        for root, dirs, files in os.walk(dir):
+        for root, dirs, files in os.walk(directory):
                 if skip_directory in dirs:
                     dirs.remove(skip_directory) # skip the directory
                 for file in files:
                     if file.endswith(".png"):
                         os.remove(os.path.join(root, file))
-    '''
-    Converts the image returned by the  script
-    to  a png file
-    #NOTE: update the path to the tmp folder
-    '''   
+
+    #NOTE: update path
     def convert(self, array):
-        #dir = '/Users/lucian/Documents/GitHub/BrainCancerSegmentation/tmp/filters'
-        dir = "./tmp/filters"
+        """Converts the image returned by the script to a png file."""
+        directory  = settings.path_to_filters
         now = datetime.now()
         file_name = now.strftime("%H:%M:%S")
         t = f"{file_name}.png"
-        path = dir + "/" + t
+        path = directory + "/" + t
         cv2.imwrite(path, array)
         return path
-    '''
-    Generates the output image by calling
-    the filters script and running it
-    '''  
+
     def generate_image(self, e):
+        """Generates the output image by calling the filters script and running it.""" 
         stuff = data[-1]
         data_list = []
         c = []
@@ -387,10 +358,9 @@ class Filters(UserControl):
                 control.content.controls.append(self.error_msg("Success", "Congratulations, your image has been generated!"))
                 control.content.update()
                 save.append(path) 
-    '''
-    Saves the output image in a selected folder
-    '''
+
     def segmentation_folder(self, e: FilePickerResultEvent):
+        """Saves the output image in a selected folder."""
         if e.path:
             try:
                 path = save[-1]
@@ -409,11 +379,9 @@ class Filters(UserControl):
                 control.content.update()
             except Exception as e:
                 print("Failed to save file")
-    '''
-    Returns the card that contains
-    the filters selection and output image
-    '''
+
     def card(self):
+        """Returns the card that contains the filters selection and output image."""
         self.container = Container(
             height=400,
             border=border.all(0.8, "white24"),
@@ -463,11 +431,9 @@ class Filters(UserControl):
         data.append(instance)
         image.append(p)
         return self.container
-    '''
-    Returns the error container that contains
-    the error/success message
-    '''
+
     def error(self):
+        """Returns the error container that contains the error/success message."""
         self.container = Container(
             height=60,
             border=border.all(0.8, "white24"),
@@ -479,10 +445,9 @@ class Filters(UserControl):
         controls_dict["error"] = self.container
 
         return self.container
-    '''
-    Builds the filters view 
-    '''
+
     def build(self):
+        """Builds the filters view."""
         self.column = Column(
             expand=True,
             alignment=MainAxisAlignment.START,

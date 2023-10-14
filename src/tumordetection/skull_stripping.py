@@ -2,12 +2,8 @@ import cv2
 import math
 import numpy as np
 
-
-
-'''
-return the contour of the brain
-'''
 def get_contourn_external(brain):
+    """Return the contour of the brain."""
     j = brain.copy()
     for i in range(0,brain.shape[0]):
         for y in range(0,brain.shape[1]):
@@ -23,23 +19,15 @@ def get_contourn_external(brain):
         circ = 4*np.pi*(area_contorno_esterno/(circunference**2))
     return area_contorno_esterno,circ
 
-
-
-'''
-return the mask of the brain and the mean color of the brain
-'''
 def get_brain(path):
+    """Return the mask of the brain and the mean color of the brain."""
     tupla = analize(path)
     mask = tupla[0]
     foto = tupla[1]
     return mask,foto,tupla[2]
 
-
-
-'''
-This function is used to find the brain in the image and the mean color of the brain
-'''
 def analize(path):
+    """This function is used to find the brain in the image and the mean color of the brain."""
     img = cv2.imread(path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     start = img.copy()

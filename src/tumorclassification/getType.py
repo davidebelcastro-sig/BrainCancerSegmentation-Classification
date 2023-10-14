@@ -1,9 +1,12 @@
 import pickle
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import settings
+
 
 def get_tumor_type(tumor_feautures):
-    # Caricamento del modello
-    #directory = "/Users/lucian/GitHub/BrainCancerSegmentation-Classification/src/tumorclassification/modello_rf.pkl"
-    directory = "./src/tumorclassification/modello_rf.pkl"
+    directory = settings.path_to_model
     try:
         with open(directory, 'rb') as file:
             model = pickle.load(file)

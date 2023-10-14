@@ -3,20 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
-
-
-'''
-#convert the image in a numpy array
-'''
 def convertInNpArray(img):
+    """Convert the image in a numpy array."""
     data = np.float32(img.reshape((-1, 1)))
     return data
 
-
-'''
-#find the best value of k using the elbow method
-'''
 def findK(data,num_range):
+    """Find the best value of k using the elbow method."""
     point = {}
     inertias = []
     ks = range(2, num_range)
@@ -36,12 +29,8 @@ def findK(data,num_range):
             break
     return k, inertias, ks
 
-
-
-'''
-this function is used to segment the image using K-Means Clustering.
-'''
 def KMeansClustering(data, k,img):
+    """This function is used to segment the image using K-Means Clustering."""
     kmeans = KMeans(n_clusters=k, random_state=0)
     kmeans.fit(data)
     labels = kmeans.predict(data)
@@ -49,20 +38,14 @@ def KMeansClustering(data, k,img):
     segmented_img = segmented_data.reshape(img.shape)
     return segmented_img
 
-
-'''
-show the image
-'''
 def showImage(img):
+    """Show the image."""
     cv2.imshow("Segmented Image", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-
-'''
-show the elbow method
-'''
 def showElbowMethod(ks,inertias):
+    """Show the elbow method."""
     plt.plot(ks, inertias, '-o')
     plt.xlabel('Numero di cluster, k')
     plt.ylabel('Somma dei quadrati delle distanze intra-cluster')
@@ -71,21 +54,15 @@ def showElbowMethod(ks,inertias):
     plt.axis('on')
     plt.show()
 
-
-'''
-call the function KMeansClustering
-'''
 def kmean(img):
+    """Call the function KMeansClustering"""
     iterations = 20  
     data = convertInNpArray(img)
     segmented_img = KMeansClustering(data, 6, img)  
     return segmented_img,6
 
-
-'''
-return the value of the priority of the tumor
-'''
 def get_priority(tup,colore_cervello,area_contorno_esterno):
+    """Return the value of the priority of the tumor."""
     colore_tumore = tup[0]
     circularity = tup[1]
     area = tup[2]
@@ -148,10 +125,8 @@ def get_priority(tup,colore_cervello,area_contorno_esterno):
     media_prio = (prio1+prio2+prio3+prio4)/120
     return media_prio
 
-'''
-return the mean color of the tumor
-'''
 def get_color(img,colore_cervello,area_contorno_esterno):
+        """Return the mean color of the tumor."""
         img = cv2.GaussianBlur(img, (5, 5), 0)
         img = cv2.medianBlur(img, 5)
         my_possibili_tumori = []
