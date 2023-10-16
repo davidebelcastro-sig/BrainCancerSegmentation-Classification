@@ -1,22 +1,25 @@
 # Brain Cancer Segmentation and Classification
-> This is my thesis and the title is "Brain Tumor Segmentation and Classification".
-To implement the project I used openCV,scikit learn,tensor flow and other similar functions.
-I used machine learning and artificial intelligence techniques.
 
-https://user-images.githubusercontent.com/32139751/235325224-0c578cff-b594-4bff-a8f3-2afa922e5cfd.mov
+> Brain Cancer Segmentation and Classification is a project developed as a thesis titled "Medical image analysis: 
+Brain cancer segmentation and classification with Computer Vision techniques". The main objective of this repository is to segment and classify brain tumors using machine learning and artificial intelligence techniques. The project leverages libraries such as openCV, scikit-learn, and TensorFlow.
+The repository provides a GUI that allows users to upload images (either in .mat or common image formats) for segmentation. Once the segmentation is done, the GUI displays the original image alongside the segmented image. It also provides statistics related to the segmentation process, such as the probability of the image being a tumor and the area of the tumor. The detected tumor is then classified into one of the categories: glioma, meningioma, or pituitary.
 
-## Requirements 
-Dependecies used for the Segmentation and Classification:
-- [cv2](https://pypi.org/project/opencv-python/)
-- [sklearn](https://pypi.org/project/scikit-learn/)
-- [numpy](https://pypi.org/project/numpy/)
-- [matplotlib](https://pypi.org/project/matplotlib/)
-- [h5py](https://pypi.org/project/h5py/)
+## Table of Contents
+- [Installation](#installation)
+    - TODO
+- [Dataset](#dataset)
+    - TODO
+- [Usage](#usage)
+    - TODO
+- [Examples](#examples)
+    - TODO
+- [Results](#results)
 
-Dependecies used for the GUI:
-- [flet](https://pypi.org/project/flet/)
+TODO => Add Video of GUI
 
-Activate a virtual environment:
+## Installation  
+
+Activate a virtual environment inside the directory:
 ```
 python3 -m venv env
 ``` 
@@ -32,8 +35,6 @@ pip3 install -r requirements.txt
 ```
 
 ## Dataset
->Two datasets were used:
-
 
 The first dataset was downloaded from Kaggle, download it [here](https://www.kaggle.com/datasets/sartajbhuvaji/brain-tumor-classification-mri).
 This contains 3264 files so divided, there are two directories: "Testing" and "Training", each directory contains other 4 directories: glioma, pituitary, meningioma, no-tumor.
@@ -54,12 +55,14 @@ Each file is in matlab(.mat) format and contains the following information :
 
 The last lines of the README.txt file present in the dataset are shown.
 This data was used in the following paper: 1. Cheng, Jun, et al. ”Enhanced Performance of Brain Tumor Classification via Tumor Region Augmentation and Partition.” PloS one 10.10 (2015). 2. Cheng, Jun, et al. "Retrieval of Brain Tumors by Adaptive Spatial Pooling and Fisher Vector Representation." PloS one 11.6 (2016). Matlab source codes are available on [github](https://github.com/chengjun583/brainTumorRetrieval).
+
 ## Usage
+
 Install the requirements and run the main.py file or run the .sh file.
 ```
 ./run.sh
 ``` 
-### Brain tumor segmentation and classification
+### Brain Tumor Segmentation and Classification
 GUI will open and you can select the image you want to segment (by clicking on the "Upload File" button) and then click on the "Start Segment" button to start the segmentation process. 
 
 Once the segmentation is done, the GUI will show the original image (on the left) adn the segmented image (on the right). You can also see some stats about the segmentation process in the 2 columns under the images, the probability of the image to a Tumor and the area of the tumor (both in percentage).
@@ -72,7 +75,8 @@ Some documentation about what the buttons do:
 - **Save Output Image**: Save the output image from the segmentation process in a selected directory.
 - **Clean**: Clean the directory that stores all the images (use it only if you want to delete all the images in the directory).
 
-### Segmentation filters
+### Segmentation Filters
+
 After the segmentation process is done you can save the output image from the segmentation process and then apply some filters to it. We can select an image from the segmentation process (otherwise the filters will not work) and then select the filters we want to apply to the image (An explanation of what each filter does will be shown at the end) and then click on the "Generate Image" button to generate the image with the filters selected. The GUI will show the generated image on the right.
 
 What each filter does:
@@ -91,19 +95,28 @@ Some documentation about what the buttons do:
 > If there are any bugs or errors in the GUI, please contact us.
 
 ## Examples
-> **Note**
-> In this page we selected a .mat file that contains the image we want to segment and we clicked on the "Start Segment" button. The GUI will show the original image on the left and the segmented image on the right. Also we can see some stats that have been generated by the segmentation process under the 2 images. There is also a "Save output Image" button that will save the output image from the segmented in a selected directory, meanwhile the Clean button is used only for cleaning the directory that stores all the images (use it only if you want to delete all the images in the directory).
 
-<img src="https://i.ibb.co/4KG1w0K/Screenshot-2023-04-29-at-20-53-23.png">
+In this page we selected a .mat file that contains the image we want to segment and we clicked on the "Start Segment" button. The GUI will show the original image on the left and the segmented image on the right. Also we can see some stats that have been generated by the segmentation process under the 2 images. There is also a "Save output Image" button that will save the output image from the segmented in a selected directory, meanwhile the Clean button is used only for cleaning the directory that stores all the images (use it only if you want to delete all the images in the directory).
 
-> **Note**
-> In this page we selected the output image from the segmentation process and we selected the "Color inside segmentation" filter to see the segmentation in color. After the the "Generate Image" button is clicked the GUI will show the original image modified with the filter selected on the right. There is also a "Save output Image" button that will save the output image from the filter in a selected directory, meanwhile the Clean button is used only for cleaning the directory that stores all the images (use it only if you want to delete all the images in the directory).
+<!-- <img src="https://i.ibb.co/4KG1w0K/Screenshot-2023-04-29-at-20-53-23.png"> -->
 
-<img src="https://i.ibb.co/PYM7ZLL/Screenshot-2023-04-29-at-20-54-20.png">
+TODO => Add Image
+
+In this page we selected the output image from the segmentation process and we selected the "Color inside segmentation" filter to see the segmentation in color. After the the "Generate Image" button is clicked the GUI will show the original image modified with the filter selected on the right. There is also a "Save output Image" button that will save the output image from the filter in a selected directory, meanwhile the Clean button is used only for cleaning the directory that stores all the images (use it only if you want to delete all the images in the directory).
+
+<!-- <img src="https://i.ibb.co/PYM7ZLL/Screenshot-2023-04-29-at-20-54-20.png"> -->
+
+TODO => Add Image
+
+## Results 
+
+TODO => Add Results images
 
 ## License
+
 > This project is licensed under the terms of the MIT license. See [LICENSE](LICENSE) for more details.
 
 ## Credits
+
 - Brain Cancer Segmentation and Classification developed by [Davide Belcastro](https://github.com/davidebelcastro-sig).
 - GUI developed by [Lucian D. Crainic](https://github.com/LucianCrainic).
