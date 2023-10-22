@@ -24,6 +24,12 @@ def get_brain(path):
     tupla = analize(path)
     mask = tupla[0]
     foto = tupla[1]
+    if mask == 1 or mask == 2:
+        res = get_contourn_external(foto)
+        if res[1] < 0.7 or res[0] < foto.shape[0]*foto.shape[1]*0.10:
+            mask = -1
+            foto  = cv2.imread(path)
+            foto = cv2.cvtColor(foto, cv2.COLOR_BGR2GRAY)
     return mask,foto,tupla[2]
 
 def analize(path):
@@ -51,12 +57,14 @@ def analize(path):
     for el in contours:
         cv2.drawContours(mask, [el], -1, 255, 2)
     for el in contours:
-        if cv2.contourArea(el) < 500:  
+        x = (500*img.shape[0]*img.shape[1]) / (480*640)
+        if cv2.contourArea(el) < x:
             cv2.drawContours(edges, [el], -1, 255, -1)       
     edges = cv2.bitwise_not(edges)
     contours, hierarchy = cv2.findContours(edges,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     for el in contours:
-        if cv2.contourArea(el) < 500:
+        x = (500*img.shape[0]*img.shape[1]) / (480*640)
+        if cv2.contourArea(el) < x:
             cv2.drawContours(edges, [el], -1, 255, -1)
     edges = cv2.bitwise_not(edges)
     black = np.zeros((img.shape[0],img.shape[1]), np.uint8)
@@ -73,14 +81,17 @@ def analize(path):
     if cv2.contourArea(c) > cv2.contourArea(external):
         c = contours[1]
     else:
-        value = img.shape[0]*img.shape[1]*0.04
-        if cv2.contourArea(c) > cv2.contourArea(external) - 10000:
+        value = cv2.contourArea(external) - 10000
+        x = (value*img.shape[0]*img.shape[1]) / (480*640)
+        if cv2.contourArea(c) > x:
             c = contours[1]
         else:
             c = contours[0]
-    if cv2.contourArea(c) < 5000: 
+    value = 5000
+    x = (value*img.shape[0]*img.shape[1]) / (480*640)
+    if cv2.contourArea(c) < x: 
         if cv2.contourArea(contours[0]) > cv2.contourArea(external):
-            return -1,start,indice  
+            return -1,start,indice 
         else:
             c = contours[0]
     contorno_appoggio = c
@@ -120,6 +131,8 @@ def analize(path):
                 start3[i][j] = 0
     contours22, hierarchy2 = cv2.findContours(start22,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     contours22 = sorted(contours22, key=cv2.contourArea, reverse=True)
+    if len(contours22) == 0:
+        return -1,start2,indice
     c22 = contours22[0]
     hull22 = cv2.convexHull(c22)
     cv2.drawContours(start22, [hull22], -1, 127, -1)
@@ -133,14 +146,17 @@ def analize(path):
         for j in range(0,start.shape[1]):
             if start3[i][j] > indice+15:
                 trovato +=1
-    vl = img.shape[1] * img.shape[0] *0.015
-    if trovato > 4500:  
+    vl = 4500
+    x = (vl*img.shape[0]*img.shape[1]) / (480*640)
+    if trovato > x:  
         trovato = 0
         for i  in range(0,start22.shape[0]):
             for j in range(0,start22.shape[1]):
                 if start33[i][j] > indice+20:
                     trovato +=1
-        if trovato > 3000:
+        vl = 3000
+        x = (vl*img.shape[0]*img.shape[1]) / (480*640)
+        if trovato > x:
             return 2,start33,indice 
         else:
             area = cv2.contourArea(hull22)

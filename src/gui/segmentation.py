@@ -91,7 +91,7 @@ class Segmentation(UserControl):
             file_to_segment = self.session[0]
             final, probablita, area, tumor_type = run.main(file_to_segment)
             if probablita == 0 and area == 0:
-                path = "./tmp/err/error_image.png"
+                path = settings.path_to_err 
                 view = controls_dict['After']
                 view_probabilita = controls_dict['probabilita']
                 view_area = controls_dict['area']

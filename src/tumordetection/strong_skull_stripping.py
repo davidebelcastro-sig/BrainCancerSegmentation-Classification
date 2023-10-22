@@ -13,7 +13,7 @@ def KMeansClustering(data, k,img):
 
 def kmean(img):
     """Call the function KMeansClustering."""
-    iterations = 20 
+    iterations = 20  
     data = np.float32(img.reshape((-1, 1)))
     segmented_img = KMeansClustering(data, 6, img)  
     return segmented_img,6
@@ -47,7 +47,7 @@ def strong_skull(foto):
                 cv2.drawContours(mask2, [el], -1, 255, -1)
                 for i in range(0, foto.shape[0]):
                     for j in range(0, foto.shape[1]):
-                        if mask2[i][j] == 255:  
+                        if mask2[i][j] == 255:   
                             if foto[i][j] in diz:
                                 diz[foto[i][j]] += 1
                             else:
@@ -59,7 +59,7 @@ def strong_skull(foto):
                 if circularity > massimo:
                     massimo = circularity
                     my_brain = el
-                    colore_cervello = media
+                    colore_cervello = media             
     try:   
         if massimo > 0.80:  
             mask2 = np.zeros(foto.shape[:2], dtype="uint8")

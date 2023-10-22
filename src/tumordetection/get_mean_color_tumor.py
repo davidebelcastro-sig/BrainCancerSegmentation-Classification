@@ -55,7 +55,7 @@ def showElbowMethod(ks,inertias):
     plt.show()
 
 def kmean(img):
-    """Call the function KMeansClustering"""
+    """Call the function KMeansClustering."""
     iterations = 20  
     data = convertInNpArray(img)
     segmented_img = KMeansClustering(data, 6, img)  
