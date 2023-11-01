@@ -4,6 +4,8 @@
 Brain cancer segmentation and classification with Computer Vision techniques". The main objective of this repository is to segment and classify brain tumors using machine learning and artificial intelligence techniques. The project leverages libraries such as openCV, scikit-learn, and TensorFlow.
 The repository provides a GUI that allows users to upload images (either in .mat or common image formats) for segmentation. Once the segmentation is done, the GUI displays the original image alongside the segmented image. It also provides statistics related to the segmentation process, such as the probability of the image being a tumor and the area of the tumor. The detected tumor is then classified into one of the categories: glioma, meningioma, or pituitary.
 
+> [!IMPORTANT]
+> The project was presented at the Maker Faire Rome 2023, you can find the project [here](https://makerfairerome.eu/it/espositori/?edition=2023&exhibit=2320497).
 
 https://github.com/davidebelcastro-sig/BrainCancerSegmentation-Classification/assets/32139751/ad8840a7-03af-4476-8a3f-8ff7af47eef2
 
